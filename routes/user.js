@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var db = require("../database.js")
-
+var db = require("../database");
 
 router.get("/user", (req, res, next) => {
-  var sql = "SELECT * FROM user"
-  var params = []
+  const sql = "SELECT * FROM user"
+  const params = []
   
   db.all(sql, params, (err, rows) => {
       if (err) {
