@@ -1,12 +1,12 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
 
 const userRouter = require('./routes/user');
 const symbolRouter= require('./routes/symbol');
 
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
