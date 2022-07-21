@@ -9,5 +9,17 @@ const db = new sqlite3.Database('db.sqlite', (err) => {
   }
 });
 
+const query = (command, method = 'all') => {
+  return new Promise((resolve, reject) => {
+    db[method](command, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
 
-module.exports = db
+
+module.exports = { db, query };
