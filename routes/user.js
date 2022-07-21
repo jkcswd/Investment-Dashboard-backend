@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {db, query} = require("../database");
+const userController = require('../controllers/userController')
 
-router.get("/user", (req, res, next) => {
-  
-});
+router.get("/user", userController);
 
 module.exports = router;
