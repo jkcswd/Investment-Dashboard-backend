@@ -10,7 +10,7 @@ const db = new sqlite3.Database('db.sqlite', (err) => {
 });
 
 const query = (command, method = 'all') => {
-  //Promise wrapper function for queries as callbacks are messy.
+  //Promise wrapper function for queries as callbacks are messy and can then use async/await in db.serialize.
   return new Promise((resolve, reject) => {
     db[method](command, (error, result) => {
       if (error) {
