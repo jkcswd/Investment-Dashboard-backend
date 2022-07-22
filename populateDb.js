@@ -2,13 +2,13 @@ const yahooFinance = require('yahoo-finance2').default;
 const {priceDb, query} = require("./database.js");
 
 // Yahoo finance tickers
-const getTickerHistory = async (ticker) => {
+const getTickerPriceHistory = async (ticker) => {
   const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
   const tickerObj = { ticker, results };
-  return tickerObj;
+  return tickerPriceObj;
 }
 
-const addDataToDb = (tickerObj) => {
+const addPriceDataToDb = (tickerPriceObj) => {
   const name = tickerObj.ticker;
   const values = tickerObj.results;
 
