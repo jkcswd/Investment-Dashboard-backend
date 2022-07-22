@@ -13,12 +13,12 @@ const addDataToDb = (tickerObj) => {
   const values = tickerObj.results;
 
   priceDb.serialize( async () => {
-    await query(`CREATE TABLE IF NOT EXISTS ${name} (date text, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
+    await query(priceDb, `CREATE TABLE IF NOT EXISTS ${name} (date text, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
 
-    values.forEach(element => {
-      await query(`INSERT INTO ${name} VALUES("${element.date}", ${element.open}, ${element.high}, ${element.low}, ${element.close}, ${element.adjClose}, ${element.volume})`, 'run')
-    }); 
-  })
+    for (const value of values) {
+      await query(priceDb, `INSERT INTO ${name} VALUES("${value.date}", ${value.open}, ${value.high}, ${value.low}, ${value.close}, ${value.adjClose}, ${value.volume})`, 'run')
+    }
+  });
 }
 
 // economic data
