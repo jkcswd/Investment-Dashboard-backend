@@ -3,34 +3,41 @@
 //  To check if current data in DB is up to date with current date
 //    If not then update data before sending response to client
 
-//TODO fix it
-db = require("./database.js");
+const {db, query} = require("./database.js");
 
+const databaseDate = () => {
+  db.serialize( async () =>{
+    try {
+      const date = await query('SELECT * FROM utility_data');
 
+      return date;
+    } catch (err) {
+      console.log(err.message)
+      return;
+    }
+  })
+}
 
-const dataDownload = () => {
+const extractDateString = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+const dataDownload = async () => {
   const dateNow = new Date(Date.now());
-  const databaseDate = databaseDate();
+  const databaseDate = await databaseDate();
+  const dateString = extractDateString(dateNow);
 
-  if (dateNow === databaseDate ) {
-
-  }
-  return databaseDate
-}
-function databaseDate() {
-  var sql = "SELECT 'last update' FROM 'utility data'"
-  var params = []
-  
-  db.all(sql, params, (err, rows) => {
-      if (err) {
-        res.status(400).json({"error":err.message});
-        return;
-      }
-      return rows;
-  });
+  console.log(databaseDate)
+  console.log(dateString)
 }
 
 
 
+
+dataDownload();
 
 module.export = dataDownload
