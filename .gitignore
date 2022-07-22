@@ -1,2 +1,5 @@
 /node_modules
-db.sqlite
+earnings_data.db
+economic_data.db
+price_data.db
+util_data.db
