@@ -2,8 +2,6 @@ const yahooFinance = require('yahoo-finance2').default;
 const {priceDb, query} = require("./database.js");
 const csv = require('fast-csv');
 
-// Yahoo finance  price data
-//
 const getTickerPriceHistory = async (ticker) => {
   const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
   const tickerPriceObj = { ticker, results };
@@ -23,7 +21,7 @@ const addPriceDataToDb = (tickerPriceObj) => {
   });
 }
 
-const tickerArray =  ['TSLA', 'AAPL', 'GOOG', 'MMM', 'DAR', 'C', 'V' ]; // Get list of stocks to use: wilshire 5000
+const tickerArray =  ['TSLA', 'AAPL', 'GOOG', 'MMM', 'DAR', 'C', 'V' ]; // TODO: convert to function:Get list of stocks to use: wilshire 5000
 
 populatePriceDataDb = async (tickerArray) => {
   try {
@@ -41,14 +39,12 @@ populatePriceDataDb = async (tickerArray) => {
     console.log(err.message);
   }
 }
-
-
-// economic data
+// TODO: other assets data
+// TODO: earnings data
+// TODO: economic data
 
 
 (function main(){
   populatePriceDataDb(tickerArray);
 })();
-
-
 // Procedural programing as it is a short standalone script to be run once when setting up the server.
