@@ -3,15 +3,23 @@ const {priceDb, query} = require('./database.js');
 const fs = require('fs');
 
 const percentProgressDisplay = (percent) => {
-  process.stdout.clearLine();
-  process.stdout.cursorTo(0);
-  process.stdout.write(percent + '%');
+  try {
+    process.stdout.cursorTo(0);
+    process.stdout.write(percent + '%');
+  } catch (err) {
+    console.log(err.message);
+  }
 }
 
 const getTickerPriceHistory = async (ticker) => {
-  const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
-  const tickerPriceObj = { name: ticker, results };
-  return tickerPriceObj;
+  try {
+    const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
+    const tickerPriceObj = { name: ticker, results };
+
+    return tickerPriceObj;
+  } catch (err) {
+    console.log(err.message);
+  }
 }
 
 const addPriceDataToDb = (tickerPriceObj) => {
@@ -19,17 +27,26 @@ const addPriceDataToDb = (tickerPriceObj) => {
   const values = tickerPriceObj.results;
 
   priceDb.serialize( async () => {
-    await query(priceDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
+    try {
+      await query(priceDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
 
-    for (const value of values) {
-      await query(priceDb, `INSERT OR IGNORE INTO ${name} VALUES("${value.date}", ${value.open}, ${value.high}, ${value.low}, ${value.close}, ${value.adjClose}, ${value.volume})`, 'run')
+      for (const value of values) {
+        await query(priceDb, `INSERT OR IGNORE INTO ${name} VALUES("${value.date}", ${value.open}, ${value.high}, ${value.low}, ${value.close}, ${value.adjClose}, ${value.volume})`, 'run')
+      }
+    } catch (err) {
+      console.log(err.message);
     }
   });
 }
 
 const missingTickersToJson = (missingTickers) => {
-  const jsonData = JSON.stringify(missingTickers);
-  fs.writeFileSync('missingStocks.json', jsonData);
+  try {
+    const jsonData = JSON.stringify(missingTickers);
+    fs.writeFileSync('missingStocks.json', jsonData);
+  } catch (err) {
+    console.log(err.message);
+  }
+
 }
 
 const populatePriceDataDb = async (tickerArray) => {
@@ -40,15 +57,15 @@ const populatePriceDataDb = async (tickerArray) => {
     try {
       const data = await getTickerPriceHistory(ticker);
 
-      await addPriceDataToDb(data);
+      if (data) { await addPriceDataToDb(data) };
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
       console.log(err.message)
-      missingTickers.push(ticker.name)
+      missingTickers.push(ticker)
     }
   }
-  
+
   console.log(' of stock price historical data population completed.');
   missingTickersToJson(missingTickers);
 }
@@ -67,7 +84,5 @@ const csvToArray = () => {
   const tickerArray = csvToArray();
 
   populatePriceDataDb(tickerArray);
-
-  return;
 })();
 // Procedural programing as it is a short standalone script to be run once when setting up the server.
