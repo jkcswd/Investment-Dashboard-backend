@@ -3,6 +3,8 @@ const {priceDb, query} = require('./database.js');
 const fs = require('fs');
 const readline = require('readline');
 
+const missingTickers = [];
+
 const percentProgressDisplay = (percent) => {
   try {
     readline.clearLine(process.stdout, 0);
@@ -21,6 +23,7 @@ const getTickerPriceHistory = async (ticker) => {
     return tickerPriceObj;
   } catch (err) {
     console.log(err.message);
+    missingTickers.push(ticker)
   }
 }
 
@@ -52,7 +55,6 @@ const missingTickersToJson = (missingTickers) => {
 
 const populatePriceDataDb = async (tickerArray) => {
   let counter = 0;
-  const missingTickers = [];
 
   for (const ticker of tickerArray) {
     try {
@@ -63,8 +65,6 @@ const populatePriceDataDb = async (tickerArray) => {
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
       console.log(err.message)
-      missingTickers.push(ticker)
-      console.log(missingTickers);
     }
   }
 
@@ -75,7 +75,7 @@ const populatePriceDataDb = async (tickerArray) => {
 // TODO: earnings data
 // TODO: economic data
 
-const csvToArray = () => {
+const csvToArray = () => { //works fine
   const csv = fs.readFileSync('wilshire_5000_stocks.csv', 'utf8');
   const tickerArray = csv.split("\n");
 
