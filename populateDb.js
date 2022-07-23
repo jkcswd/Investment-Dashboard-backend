@@ -56,7 +56,7 @@ const missingTickersToJson = (missingTickers) => {
 }
 
 const csvToArray = () => {
-  const csv = fs.readFileSync('wilshire_5000_stocks.csv', 'utf8');
+  const csv = fs.readFileSync('wilshire_5000_stocks+etfs.csv', 'utf8');
   const tickerArray = csv.split("\n");
 
   return tickerArray 
