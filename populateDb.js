@@ -2,6 +2,12 @@ const yahooFinance = require('yahoo-finance2').default;
 const {priceDb, query} = require("./database.js");
 const csv = require("fs").readFileSync("wilshire_5000_stocks.csv", "utf8");
 
+const percentProgressDisplay = (percent) => {
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(percent + '%');
+}
+
 const getTickerPriceHistory = async (ticker) => {
   const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
   const tickerPriceObj = { ticker, results };
@@ -21,23 +27,25 @@ const addPriceDataToDb = (tickerPriceObj) => {
   });
 }
 
-const csvToArray = () => {
-  const tickerArray = csv.split("\n");
-  return tickerArray 
-}
 
-populatePriceDataDb = async (tickerArray) => {
+
+const populatePriceDataDb = async (tickerArray) => {
   try {
     let counter = 0;
 
     for (const ticker of tickerArray) {
-      const data = await getTickerPriceHistory(ticker);
+      try {
+        const data = await getTickerPriceHistory(ticker);
 
-      await addPriceDataToDb(data);
-      counter = counter++;
-      console.log(`${( counter / tickerArray.length ) * 100}% of database populated.`);
+        await addPriceDataToDb(data);
+        counter++;
+        percentProgressDisplay(( counter / tickerArray.length ) * 100);
+      } catch (err) {
+        console.log(err.message)
+        data.ticker //to json
+      }
     }
-    console.log('Stock Price Historical data population completed.');
+    console.log(' of stock price historical data population completed.');
   } catch (err){
     console.log(err.message);
   }
@@ -47,7 +55,16 @@ populatePriceDataDb = async (tickerArray) => {
 // TODO: economic data
 
 
+const csvToArray = () => {
+  const tickerArray = csv.split("\n");
+  return tickerArray 
+}
+
 (function main(){
-  //populatePriceDataDb(tickerArray);
+  const tickerArray = csvToArray();
+
+  populatePriceDataDb(tickerArray);
+
+  return;
 })();
 // Procedural programing as it is a short standalone script to be run once when setting up the server.
