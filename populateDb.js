@@ -37,25 +37,22 @@ const missingTickersToJson = (data) => {
 }
 
 const populatePriceDataDb = async (tickerArray) => {
-  try {
-    let counter = 0;
+  let counter = 0;
 
-    for (const ticker of tickerArray) {
-      try {
-        const data = await getTickerPriceHistory(ticker);
+  for (const ticker of tickerArray) {
+    try {
+      const data = await getTickerPriceHistory(ticker);
 
-        await addPriceDataToDb(data);
-        counter++;
-        percentProgressDisplay(( counter / tickerArray.length ) * 100);
-      } catch (err) {
-        console.log(err.message)
-        data.ticker //to json
-      }
+      await addPriceDataToDb(data);
+      counter++;
+      percentProgressDisplay(( counter / tickerArray.length ) * 100);
+    } catch (err) {
+      console.log(err.message)
+      data.ticker //to json
     }
-    console.log(' of stock price historical data population completed.');
-  } catch (err){
-    console.log(err.message);
   }
+  console.log(' of stock price historical data population completed.');
+
 }
 // TODO: other assets data
 // TODO: earnings data
