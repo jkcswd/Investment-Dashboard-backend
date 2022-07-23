@@ -27,17 +27,14 @@ const addPriceDataToDb = (tickerPriceObj) => {
   });
 }
 
-const missingTickersToJson = (data) => {
-  try{
-    var jsonData = JSON.stringify(data);
-    fs.writeFileSync('missingStocks.json', jsonData);
-  } catch (err){
-    console.log(err.message);
-  } 
+const missingTickersToJson = (missingTickers) => {
+  const jsonData = JSON.stringify(missingTickers);
+  fs.writeFileSync('missingStocks.json', jsonData);
 }
 
 const populatePriceDataDb = async (tickerArray) => {
   let counter = 0;
+  const missingTickers = {};
 
   for (const ticker of tickerArray) {
     try {
@@ -48,11 +45,11 @@ const populatePriceDataDb = async (tickerArray) => {
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
       console.log(err.message)
-      data.ticker //to json
+      
     }
   }
   console.log(' of stock price historical data population completed.');
-
+  missingTickersToJson(missingTickers);
 }
 // TODO: other assets data
 // TODO: earnings data
