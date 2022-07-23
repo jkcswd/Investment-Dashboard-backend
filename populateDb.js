@@ -78,7 +78,7 @@ const populatePriceData= async () => {
 
   missingTickersToJson(missingTickers);
 }
-// TODO: other assets data
+
 // TODO: earnings data
 // TODO: economic data
 
