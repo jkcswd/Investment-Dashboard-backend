@@ -62,7 +62,7 @@ const csvToArray = () => {
   return tickerArray 
 }
 
-const populatePriceDataDb = async () => {
+const populatePriceData= async () => {
   let counter = 0;
   const tickerArray = csvToArray();
 
@@ -83,6 +83,6 @@ const populatePriceDataDb = async () => {
 // TODO: economic data
 
 (function main (){
-  populatePriceDataDb();
+  populatePriceData()
 })();
 // Procedural programing as it is a short standalone script to be run once when setting up the server.
