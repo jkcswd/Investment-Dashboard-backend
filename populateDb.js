@@ -5,7 +5,7 @@ const readline = require('readline');
 
 const missingTickers = [];
 
-const percentProgressDisplay = (percent) => {
+const percentProgressDisplay = (percent) => { //works
   try {
     readline.clearLine(process.stdout, 0);
     readline.cursorTo(process.stdout, 0, null);
@@ -15,7 +15,7 @@ const percentProgressDisplay = (percent) => {
   }
 }
 
-const getTickerPriceHistory = async (ticker) => {
+const getTickerPriceHistory = async (ticker) => { //works
   try {
     const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
     const tickerPriceObj = { name: ticker, results };
@@ -27,7 +27,7 @@ const getTickerPriceHistory = async (ticker) => {
   }
 }
 
-const addPriceDataToDb = async (tickerPriceObj) => {
+const addPriceDataToDb = async (tickerPriceObj) => { //does not block when called in async function with await
   const name = tickerPriceObj.name;
   const values = tickerPriceObj.results;
 
@@ -44,7 +44,7 @@ const addPriceDataToDb = async (tickerPriceObj) => {
   });
 }
 
-const missingTickersToJson = (missingTickers) => {
+const missingTickersToJson = (missingTickers) => { //works
   try {
     const jsonData = JSON.stringify(missingTickers);
     fs.writeFileSync('missingStocks.json', jsonData);
@@ -53,7 +53,7 @@ const missingTickersToJson = (missingTickers) => {
   }
 }
 
-const populatePriceDataDb = async (tickerArray) => {
+const populatePriceDataDb = async (tickerArray) => { //probably works
   let counter = 0;
 
   for (const ticker of tickerArray) {
@@ -82,9 +82,9 @@ const csvToArray = () => { //works fine
   return tickerArray 
 }
 
-(async function main (){
+(function main (){ //works
   const tickerArray = csvToArray();
 
-  await populatePriceDataDb(tickerArray);
+  populatePriceDataDb(tickerArray);
 })();
 // Procedural programing as it is a short standalone script to be run once when setting up the server.
