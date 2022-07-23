@@ -1,6 +1,6 @@
 const yahooFinance = require('yahoo-finance2').default;
-const {priceDb, query} = require("./database.js");
-const csv = require("fs").readFileSync("wilshire_5000_stocks.csv", "utf8");
+const {priceDb, query} = require('./database.js');
+const fs = require('fs');
 
 const percentProgressDisplay = (percent) => {
   process.stdout.clearLine();
@@ -27,7 +27,14 @@ const addPriceDataToDb = (tickerPriceObj) => {
   });
 }
 
-
+const missingTickersToJson = (data) => {
+  try{
+    var jsonData = JSON.stringify(data);
+    fs.writeFileSync('missingStocks.json', jsonData);
+  } catch (err){
+    console.log(err.message);
+  } 
+}
 
 const populatePriceDataDb = async (tickerArray) => {
   try {
@@ -54,9 +61,10 @@ const populatePriceDataDb = async (tickerArray) => {
 // TODO: earnings data
 // TODO: economic data
 
-
 const csvToArray = () => {
+  const csv = fs.readFileSync('wilshire_5000_stocks.csv', 'utf8');
   const tickerArray = csv.split("\n");
+
   return tickerArray 
 }
 
