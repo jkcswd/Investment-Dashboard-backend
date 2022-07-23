@@ -10,12 +10,12 @@ const percentProgressDisplay = (percent) => {
 
 const getTickerPriceHistory = async (ticker) => {
   const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
-  const tickerPriceObj = { ticker, results };
+  const tickerPriceObj = { name: ticker, results };
   return tickerPriceObj;
 }
 
 const addPriceDataToDb = (tickerPriceObj) => {
-  const name = tickerPriceObj.ticker;
+  const name = tickerPriceObj.name;
   const values = tickerPriceObj.results;
 
   priceDb.serialize( async () => {
@@ -34,7 +34,7 @@ const missingTickersToJson = (missingTickers) => {
 
 const populatePriceDataDb = async (tickerArray) => {
   let counter = 0;
-  const missingTickers = {};
+  const missingTickers = [];
 
   for (const ticker of tickerArray) {
     try {
@@ -45,9 +45,10 @@ const populatePriceDataDb = async (tickerArray) => {
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
       console.log(err.message)
-      
+      missingTickers.push(ticker.name)
     }
   }
+  
   console.log(' of stock price historical data population completed.');
   missingTickersToJson(missingTickers);
 }
