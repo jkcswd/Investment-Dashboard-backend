@@ -1,10 +1,12 @@
 const yahooFinance = require('yahoo-finance2').default;
 const {priceDb, query} = require('./database.js');
 const fs = require('fs');
+const readline = require('readline');
 
 const percentProgressDisplay = (percent) => {
   try {
-    process.stdout.cursorTo(0);
+    readline.clearLine(process.stdout, 0);
+    readline.cursorTo(process.stdout, 0, null);
     process.stdout.write(percent + '%');
   } catch (err) {
     console.log(err.message);
@@ -22,11 +24,11 @@ const getTickerPriceHistory = async (ticker) => {
   }
 }
 
-const addPriceDataToDb = (tickerPriceObj) => {
+const addPriceDataToDb = async (tickerPriceObj) => {
   const name = tickerPriceObj.name;
   const values = tickerPriceObj.results;
 
-  priceDb.serialize( async () => {
+  await priceDb.serialize( async () => {
     try {
       await query(priceDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
 
@@ -46,7 +48,6 @@ const missingTickersToJson = (missingTickers) => {
   } catch (err) {
     console.log(err.message);
   }
-
 }
 
 const populatePriceDataDb = async (tickerArray) => {
@@ -63,6 +64,7 @@ const populatePriceDataDb = async (tickerArray) => {
     } catch (err) {
       console.log(err.message)
       missingTickers.push(ticker)
+      console.log(missingTickers);
     }
   }
 
@@ -80,9 +82,9 @@ const csvToArray = () => {
   return tickerArray 
 }
 
-(function main(){
+(async function main (){
   const tickerArray = csvToArray();
 
-  populatePriceDataDb(tickerArray);
+  await populatePriceDataDb(tickerArray);
 })();
 // Procedural programing as it is a short standalone script to be run once when setting up the server.
