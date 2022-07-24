@@ -23,7 +23,7 @@ const extractDateString = (date) => {
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`;
+  return `${year}-${month}-${day}`;
 }
 
 const dataDownload = async () => {
