@@ -27,6 +27,14 @@ const getTickerPriceHistory = async (ticker) => {
   }
 }
 
+const extractDateString = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return `${year}-${month}-${day}`;
+}
+
 const addPriceDataToDb = async (ticker) => { 
     try {
       const tickerPriceObj = await getTickerPriceHistory(ticker);
@@ -38,7 +46,7 @@ const addPriceDataToDb = async (ticker) => {
         await query(priceDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
 
         for (const value of values) {
-          await query(priceDb, `INSERT OR IGNORE INTO ${name} VALUES("${value.date}", ${value.open}, ${value.high}, ${value.low}, ${value.close}, ${value.adjClose}, ${value.volume})`, 'run');
+          await query(priceDb, `INSERT OR IGNORE INTO ${name} VALUES("${extractDateString(value.date)}", ${value.open}, ${value.high}, ${value.low}, ${value.close}, ${value.adjClose}, ${value.volume})`, 'run');
         }
       }
     } catch (err) {
