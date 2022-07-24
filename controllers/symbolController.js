@@ -1,19 +1,33 @@
-const {db, query} = require("../database");
+const {priceDb, query} = require("../database");
 
-const symbolController = (req,res,next) => {
+const symbolController = async (req,res,next) => {
   const tickerSymbol = req.params.ticker;
+  const from = req.query.from;
+  const to = req.query.to;
 
-  // add filtering in req.query for date to/from data 
+  try {
+    if (from || to) {
+      if (!from) {
+        const data = await query(priceDb,`SELECT * FROM ${tickerSymbol} WHERE date <= '${to}'`);
 
-  db.serialize( async () => {
-    try {
-      const data = await query(`SELECT * FROM ${tickerSymbol}`)
-      
+        res.json(data);
+      } else if (!to) {
+        const data = await query(priceDb,`SELECT * FROM ${tickerSymbol} WHERE date >='${from}'`);
+
+        res.json(data);
+      }else {
+        const data = await query(priceDb,`SELECT * FROM ${tickerSymbol} WHERE date >='${from}' AND date <= '${to}'`);
+
+        res.json(data);
+      }
+    }else {
+      const data = await query(priceDb,`SELECT * FROM ${tickerSymbol}`);
+    
       res.json(data);
-    } catch(err){
-      res.status(400).json({"error":err.message});
     }
-  });
+  } catch(err){
+    res.status(400).json({"error":err.message});
+  }
 }
 
 module.exports = symbolController;
