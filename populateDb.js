@@ -37,7 +37,7 @@ const extractDateString = (date) => {
   return `${year}-${month}-${day}`;
 }
 
-const addPriceDataToDb = async (ticker) => { 
+const addPriceDataToDb = async (ticker) => { // tickers with = and ^ cause error
     try {
       const tickerPriceObj = await getTickerPriceHistory(ticker);
 
