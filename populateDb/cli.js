@@ -1,5 +1,5 @@
-import inquirer from "inquirer";
-import gradient from "gradient-string";
+const inquirer = require("inquirer");
+const gradient = require("gradient-string");
   
 const checkForPopulate = async (nameOfDataSet) => {
   console.log(gradient.passion(`Populate ${nameOfDataSet}`));
@@ -18,5 +18,5 @@ const checkForPopulate = async (nameOfDataSet) => {
     checkForPopulate();
   }
 }
-
-export default checkForPopulate;
+checkForPopulate()
+module.exports = checkForPopulate;
