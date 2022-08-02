@@ -52,3 +52,4 @@ const populatePriceData= async () => {
 }
 
 
+export default populatePriceData;
