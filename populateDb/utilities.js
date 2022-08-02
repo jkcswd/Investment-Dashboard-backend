@@ -39,4 +39,4 @@ const missingTickersToJson = (missingTickers, jsonFilename) => {
   }
 }
 
-export { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson };
+module.exports = { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson };
