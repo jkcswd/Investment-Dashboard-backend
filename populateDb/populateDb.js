@@ -1,19 +1,7 @@
 const yahooFinance = require('yahoo-finance2').default;
-const {priceDb, query} = require('./database.js');
-const fs = require('fs');
-const readline = require('readline');
+const {priceDb, query} = require('../database.js');
 
 const missingTickers = [];
-
-const percentProgressDisplay = (percent) => { 
-  try {
-    readline.clearLine(process.stdout, 0);
-    readline.cursorTo(process.stdout, 0, null);
-    process.stdout.write(percent + '% of stock price historical data population completed.');
-  } catch (err) {
-    console.log(err.message);
-  }
-}
 
 const getTickerPriceHistory = async (ticker) => { 
   try {
@@ -25,16 +13,6 @@ const getTickerPriceHistory = async (ticker) => {
     console.log(err.message);
     missingTickers.push(ticker)
   }
-}
-
-const extractDateString = (date) => {
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  if(day < 10 ) { day = `0${day}` };
-  if(month < 10 ) { month = `0${month}` };
-
-  return `${year}-${month}-${day}`;
 }
 
 const addPriceDataToDb = async (ticker) => { // tickers with = and ^ cause error
@@ -54,22 +32,6 @@ const addPriceDataToDb = async (ticker) => { // tickers with = and ^ cause error
     } catch (err) {
       console.log(err.message);
     }
-}
-
-const missingTickersToJson = (missingTickers) => { 
-  try {
-    const jsonData = JSON.stringify(missingTickers);
-    fs.writeFileSync('missingStocks.json', jsonData);
-  } catch (err) {
-    console.log(err.message);
-  }
-}
-
-const csvToArray = () => {
-  const csv = fs.readFileSync('wilshire_5000_stocks+etfs.csv', 'utf8');
-  const tickerArray = csv.split("\n");
-
-  return tickerArray 
 }
 
 const populatePriceData= async () => {
@@ -95,4 +57,3 @@ const populatePriceData= async () => {
 (function main (){
   populatePriceData()
 })();
-// Procedural programing as it is a short standalone script to be run once when setting up the server.
