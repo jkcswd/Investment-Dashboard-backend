@@ -16,7 +16,7 @@ const getTickerPriceHistory = async (ticker) => {
   }
 }
 
-const addPriceDataToDb = async (ticker) => { // tickers with = and ^ cause error
+const addPriceDataToDb = async (ticker) => { 
     try {
       const tickerPriceObj = await getTickerPriceHistory(ticker);
 
