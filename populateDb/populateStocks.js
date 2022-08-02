@@ -1,5 +1,6 @@
 const yahooFinance = require('yahoo-finance2').default;
 const {priceDb, query} = require('../database.js');
+const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson } = require('./utilities.js')
 
 const missingTickers = [];
 
@@ -11,7 +12,7 @@ const getTickerPriceHistory = async (ticker) => {
     return tickerPriceObj;
   } catch (err) {
     console.log(err.message);
-    missingTickers.push(ticker)
+    missingTickers.push(ticker);
   }
 }
 
@@ -36,7 +37,7 @@ const addPriceDataToDb = async (ticker) => { // tickers with = and ^ cause error
 
 const populatePriceData= async () => {
   let counter = 0;
-  const tickerArray = csvToArray();
+  const tickerArray = csvToArray('../jsonAndCsv/wilshire_5000_stocks.csv');
 
   for (const ticker of tickerArray) {
     try {
@@ -48,7 +49,7 @@ const populatePriceData= async () => {
     }
   }
 
-  missingTickersToJson(missingTickers);
+  missingTickersToJson(missingTickers, '../jsonAndCsv/missingStocks.json');
 }
 
 
