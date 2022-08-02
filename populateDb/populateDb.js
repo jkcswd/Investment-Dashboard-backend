@@ -9,7 +9,7 @@ const main = async () => {
   if (checkForStockPricePopulate == 'y') { populatePriceData(); }
 }
 
-setTimeout(() => {
+setTimeout(() => { //allow to connect to DBs before sending prompts
   main();
 }, 1)
 
