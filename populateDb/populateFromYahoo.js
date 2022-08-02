@@ -16,12 +16,12 @@ const getTickerPriceHistory = async (ticker) => {
   }
 }
 
-const addPriceDataToDb = async (ticker) => { 
+const addPriceDataToDb = async (ticker, stocksOrOther) => { // Other assets with special characters cause syntax errors in DB so need to be wrapped in "".
     try {
       const tickerPriceObj = await getTickerPriceHistory(ticker);
 
       if (tickerPriceObj) {
-        const name = tickerPriceObj.name;
+        const name = (stocksOrOther == 'stocks') ? tickerPriceObj.name : `"${tickerPriceObj.name}"`;
         const values = tickerPriceObj.results;  
 
         await query(priceDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
@@ -35,13 +35,17 @@ const addPriceDataToDb = async (ticker) => {
     }
 }
 
-const populatePriceData= async () => {
+const populatePriceData = async (stocksOrOther) => { // Different file paths needed for stocks or other assets.
+  const csvRoute = (stocksOrOther == 'stocks') ? './jsonAndCsv/wilshire5000Stocks.csv' : './jsonAndCsv/otherAssets.csv';
+  const jsonRoute = (stocksOrOther == 'stocks') ? './jsonAndCsv/missingStocks.json' : './jsonAndCsv/missingAssets.json';
+  const tickerArray = csvToArray(csvRoute);
   let counter = 0;
-  const tickerArray = csvToArray('./jsonAndCsv/wilshire5000Stocks.csv');
+
+  missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
   for (const ticker of tickerArray) {
     try {
-      await addPriceDataToDb(ticker);
+      await addPriceDataToDb(ticker, stocksOrOther);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
@@ -49,8 +53,7 @@ const populatePriceData= async () => {
     }
   }
 
-  missingTickersToJson(missingTickers, './jsonAndCsv/missingStocks.json');
+  missingTickersToJson(missingTickers, jsonRoute);
 }
-
 
 module.exports = populatePriceData;
