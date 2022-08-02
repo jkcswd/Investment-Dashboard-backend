@@ -15,8 +15,8 @@ const checkForPopulate = async (nameOfDataSet) => {
     return response.toLowerCase();
   } else {
     console.log('Only input "y" or "n". Try again.')
-    checkForPopulate();
+    checkForPopulate(nameOfDataSet);
   }
 }
-checkForPopulate()
+
 module.exports = checkForPopulate;
