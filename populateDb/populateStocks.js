@@ -37,7 +37,7 @@ const addPriceDataToDb = async (ticker) => { // tickers with = and ^ cause error
 
 const populatePriceData= async () => {
   let counter = 0;
-  const tickerArray = csvToArray('../jsonAndCsv/wilshire_5000_stocks.csv');
+  const tickerArray = csvToArray('./jsonAndCsv/wilshire5000Stocks.csv');
 
   for (const ticker of tickerArray) {
     try {
@@ -49,7 +49,7 @@ const populatePriceData= async () => {
     }
   }
 
-  missingTickersToJson(missingTickers, '../jsonAndCsv/missingStocks.json');
+  missingTickersToJson(missingTickers, './jsonAndCsv/missingStocks.json');
 }
 
 
