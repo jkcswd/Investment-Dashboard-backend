@@ -42,11 +42,11 @@ const populateEconomicData = async () => {
   const symbolArray = csvToArray(csvRoute);  
   let counter = 0;
 
-  missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
+  missingSymbols.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
   for (const ticker of tickerArray) {
     try {
-      await addPriceDataToDb(symbol);
+      await addDataToDb(symbol);
       counter++;
       percentProgressDisplay(( counter / symbolArray.length ) * 100);
     } catch (err) {
@@ -54,7 +54,7 @@ const populateEconomicData = async () => {
     }
   }
 
-  missingTickersToJson(missingTickers, jsonRoute);
+  missingTickersToJson(missingSymbols, jsonRoute);
 }
 
 module.exports = populateEconomicData;
