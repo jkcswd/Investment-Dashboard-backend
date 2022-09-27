@@ -35,10 +35,10 @@ const addPriceDataToDb = async (ticker, stocksOrOther) => { // Other assets with
     }
 }
 
-const populatePriceData = async (stocksOrOther) => { // Different file paths needed for stocks or other assets.
+const populatePriceData = async (stocksOrOther) => { //String input to differentiate data that function should populate.
   const csvRoute = (stocksOrOther == 'stocks') ? './jsonAndCsv/wilshire5000Stocks.csv' : './jsonAndCsv/otherAssets.csv';
   const jsonRoute = (stocksOrOther == 'stocks') ? './jsonAndCsv/missingStocks.json' : './jsonAndCsv/missingAssets.json';
-  const tickerArray = csvToArray(csvRoute);
+  const tickerArray = csvToArray(csvRoute);   // Different file paths needed for stocks or other assets.
   let counter = 0;
 
   missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
