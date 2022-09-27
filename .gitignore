@@ -4,3 +4,5 @@ economic_data.db
 price_data.db
 util_data.db
 .env
+missingAssets.json
+missingStocks.json
