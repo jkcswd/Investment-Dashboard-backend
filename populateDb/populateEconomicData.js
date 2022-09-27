@@ -12,7 +12,7 @@ const fetchFredData = async (symbol) => {
     return data;
   }catch (err) {
     console.log(err.message)
-    missingTickers.push(symbol);
+    missingSymbols.push(symbol);
   }
 }
 
