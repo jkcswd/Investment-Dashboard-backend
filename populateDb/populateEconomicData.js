@@ -1,12 +1,13 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
 const { economicDb, query } = require('../database');
+const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson } = require('./utilities.js')
 
 const missingSymbols = [];
 
 const fetchFredData = async (symbol) => {
   try{
-    const response = await fetch(`https://api.stlouisfed.org/fred/series?series_id=${symbol}&api_key=${process.env.API_KEY}&file_type=json`)
+    const response = await fetch(`https://api.stlouisfed.org/fred/series?series_id=${symbol}&api_key=${process.env.API_KEY}&file_type=json`); //fix to return actual dataset
     const data = await response.json()
 
     return data;
