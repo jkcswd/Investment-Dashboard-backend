@@ -3,6 +3,8 @@ const fetch = require('node-fetch');
 const { economicDb, query } = require('../database');
 const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson } = require('./utilities.js')
 
+// TODO: potential refactor as this code is fairly similar to populateFromYahoo.js
+
 const missingSymbols = [];
 
 const fetchFredData = async (symbol) => {
