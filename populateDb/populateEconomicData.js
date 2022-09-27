@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const { economicDb } = require('../database');
+const { economicDb, query } = require('../database');
 
 const missingSymbols = [];
 
@@ -37,14 +37,14 @@ const addDataToDb = async (symbol) => {
 
 
 const populateEconomicData = async () => { 
-  const csvRoute = ''
-  const jsonRoute = ''
+  const csvRoute = './jsonAndCsv/economic.csv'
+  const jsonRoute = './jsonAndCsv/missingEconomic.json'
   const symbolArray = csvToArray(csvRoute);  
   let counter = 0;
 
   missingSymbols.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
-  for (const ticker of tickerArray) {
+  for (const symbol of symbolArray) {
     try {
       await addDataToDb(symbol);
       counter++;
