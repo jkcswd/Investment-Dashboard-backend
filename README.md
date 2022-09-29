@@ -16,4 +16,10 @@ A dashboard for investment analysis and management.
 
 ## Back-end
 
+- Daily and monthly calculations to be done on the backend server.
+  - Monthly: Relative strength of stocks.
+  - Daily: Up/Down volume, advancers and decliners
+
 ## Front-end
+
+- On demand calculations done on frontend
