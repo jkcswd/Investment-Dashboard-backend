@@ -6,3 +6,4 @@ util_data.db
 .env
 missingAssets.json
 missingStocks.json
+calculations.js
