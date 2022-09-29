@@ -8,10 +8,9 @@ const missingTickers = [];
 
 const getEarningsHistory = async (ticker) => { 
   try {
-    const results = await yahooFinance.quoteSummary(ticker, {modules: [ "earningsHistory" ] }); //change to earnings
+    const results = await yahooFinance.quoteSummary(ticker, {modules: [ "earningsHistory" ] });
     const tickerPriceObj = { name: ticker, results: results.earningsHistory.history };
 
-    console.log(tickerPriceObj)
     return tickerPriceObj;
   } catch (err) {
     console.log(err.message);
@@ -19,7 +18,7 @@ const getEarningsHistory = async (ticker) => {
   }
 }
 
-const addPriceDataToDb = async (ticker) => { // Other assets with special characters cause syntax errors in DB so need to be wrapped in "".
+const addEarningsDataToDb = async (ticker) => { // Other assets with special characters cause syntax errors in DB so need to be wrapped in "".
     try {
       const tickerPriceObj = await getEarningsHistory(ticker);
 
@@ -27,10 +26,10 @@ const addPriceDataToDb = async (ticker) => { // Other assets with special charac
         const name = ticker;
         const values = tickerPriceObj.results;  
 
-        await query(earningsDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, open real, high real, low real, close real, adjClose real, volume integer)`, 'run');
+        await query(earningsDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, epsActual real, epsEstimate real)`, 'run');
 
         for (const value of values) {
-          await query(earningsDb, `INSERT OR IGNORE INTO ${name} VALUES("${extractDateString(value.date)}", ${value.open}, ${value.high}, ${value.low}, ${value.close}, ${value.adjClose}, ${value.volume})`, 'run');
+          await query(earningsDb, `INSERT OR IGNORE INTO ${name} VALUES("${extractDateString(value.quarter)}", ${value.epsActual}, ${value.epsEstimate})`, 'run');
         }
       }
     } catch (err) {
@@ -48,7 +47,7 @@ const populateEarningsData = async () => {
 
   for (const ticker of tickerArray) {
     try {
-      await addPriceDataToDb(ticker, stocksOrOther);
+      await addEarningsDataToDb(ticker, stocksOrOther);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
@@ -58,7 +57,5 @@ const populateEarningsData = async () => {
 
   missingTickersToJson(missingTickers, jsonRoute);
 }
-
-getEarningsHistory('aapl');
 
 module.exports = populateEarningsData;
