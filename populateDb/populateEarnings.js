@@ -18,7 +18,7 @@ const getEarningsHistory = async (ticker) => {
   }
 }
 
-const addEarningsDataToDb = async (ticker) => { // Other assets with special characters cause syntax errors in DB so need to be wrapped in "".
+const addEarningsDataToDb = async (ticker) => { 
     try {
       const tickerPriceObj = await getEarningsHistory(ticker);
 
@@ -39,7 +39,7 @@ const addEarningsDataToDb = async (ticker) => { // Other assets with special cha
 
 const populateEarningsData = async () => { 
   const csvRoute = './jsonAndCsv/wilshire5000Stocks.csv';
-  const jsonRoute = './jsonAndCsv/missingStocks.json';
+  const jsonRoute = './jsonAndCsv/missingStocksEarnings.json';
   const tickerArray = csvToArray(csvRoute);   
   let counter = 0;
 
