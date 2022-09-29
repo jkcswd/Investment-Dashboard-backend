@@ -13,10 +13,10 @@ const createDb = (dbName) => {
   return db;
 }
 
-const query = (db, command, method = 'all') => {
+const query = (db, command, driverMethod = 'all') => {
   //Promise wrapper function for queries as callbacks are messy and can then use async/await in db.serialize.
   return new Promise((resolve, reject) => {
-    db[method](command, (error, result) => {
+    db[driverMethod](command, (error, result) => {
       if (error) {
         reject(error);
       } else {
