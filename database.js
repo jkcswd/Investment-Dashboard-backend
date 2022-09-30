@@ -1,5 +1,7 @@
 var sqlite3 = require('sqlite3').verbose()
 
+//TODO convert to sequlelize 
+
 const createDb = (dbName) => {
   const db = new sqlite3.Database(dbName, (err) => {
     if (err) {
