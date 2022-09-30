@@ -7,3 +7,4 @@ util_data.db
 missingAssets.json
 missingStocks.json
 calculations.js
+mainDB.db
