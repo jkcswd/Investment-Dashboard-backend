@@ -13,6 +13,7 @@ A dashboard for investment analysis and management.
 - Data filtered/paginated by date/other requirements on the server.
 - REST API used to transmit data to client.
 - Calculations done on data by the client to produce composite data or graphical displays of data.
+- 
 
 ## Back-end
 
