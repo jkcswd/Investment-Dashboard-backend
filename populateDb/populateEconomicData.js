@@ -6,31 +6,28 @@ const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJ
 
 const missingSymbols = [];
 
-const fetchFredData = async (symbol) => {
+const fetchFredData = async (ticker) => {
   try{
-    const response = await fetch(`https://api.stlouisfed.org/fred/series?series_id=${symbol}&api_key=${process.env.API_KEY}&file_type=json`); 
+    const response = await fetch(`https://api.stlouisfed.org/fred/series?series_id=${ticker}&api_key=${process.env.API_KEY}&file_type=json`); 
     const data = await response.json()
 
     return data;
   }catch (err) {
     console.log(err.message)
-    missingSymbols.push(symbol);
+    missingSymbols.push(ticker);
   }
 }
 
-const addDataToDb = async (symbol) => { 
+const addDataToDb = async (ticker, fKey) => { 
     try {
-      const data = await fetchFredData(symbol);
+      const data = await fetchFredData(ticker);
 
       if (data) {
-        const name = symbol;
-        const values = data 
 
-        await query(economicDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, value real)`, 'run');
 
-        for (const value of values) {
-          await query(economicDb, `INSERT OR IGNORE INTO ${name} VALUES("${extractDateString(value.date)}", ${value.value}`, 'run');
-        }
+
+
+
       }
     } catch (err) {
       console.log(err.message);
@@ -39,14 +36,13 @@ const addDataToDb = async (symbol) => {
 
 
 const populateEconomicData = async () => { 
-  const csvRoute = './jsonAndCsv/economic.csv'
-  const jsonRoute = './jsonAndCsv/missingEconomic.json'
-  const symbolArray = csvToArray(csvRoute);  
   let counter = 0;
 
-  for (const symbol of symbolArray) {
+  // TODO create array selecting dataSource:fred data from tickerlist
+
+  for (const tickerData of tickerArray) {
     try {
-      await addDataToDb(symbol);
+      await addDataToDb(tickerData ,fKey);
       counter++;
       percentProgressDisplay(( counter / symbolArray.length ) * 100);
     } catch (err) {
@@ -54,7 +50,7 @@ const populateEconomicData = async () => {
     }
   }
 
-  missingTickersToJson(missingSymbols, jsonRoute);
+  missingTickersToJson(missingSymbols, './jsonAndCsv/missingEconomic.json');
 }
 
 module.exports = populateEconomicData;
