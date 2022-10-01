@@ -20,9 +20,6 @@ const addPriceDataToDb = async (ticker, fKey) => {
   try {
     const tickerPriceObj = await getTickerPriceHistory(ticker);
 
-    
-    await PriceData.sync();
-
     for (result of tickerPriceObj.results) {
       if (tickerPriceObj) {
         await PriceData.create({
@@ -42,15 +39,20 @@ const addPriceDataToDb = async (ticker, fKey) => {
 }
 
 const populatePriceData = async () => {
-  const jsonRoute = (stocksOrOther == 'stocks') ? : './jsonAndCsv/missingAssets.json';
-  const tickerArray = selectALL   // Different file paths needed for stocks or other assets.
   let counter = 0;
+  const tickerArray = await TickerList.findAll({
+    attributes: ['ticker'],
+    where: { dataSource: 'yahoo' }
+  });
 
+  
+    
+  await PriceData.sync();
   missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
-  for (const ticker of tickerArray) { // This is probably correct
+  for (const tickerData of tickerArray) { 
     try {
-      await addPriceDataToDb(ticker, stocksOrOther);
+      await addPriceDataToDb(tickerData.dataValues.ticker);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
@@ -61,5 +63,6 @@ const populatePriceData = async () => {
   missingTickersToJson(missingTickers, './jsonAndCsv/missingTickers.json');
 }
 
+populatePriceData();
 
 module.exports = populatePriceData;
