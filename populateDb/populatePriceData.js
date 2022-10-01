@@ -41,11 +41,8 @@ const addPriceDataToDb = async (ticker, fKey) => {
   }
 }
 
-/*
-
-const populateFromYahooData = async (stocksOrOther) => { //String input to differentiate data that function should populate.
-  // Will not need CSV Route and function
-  const jsonRoute = (stocksOrOther == 'stocks') ? './jsonAndCsv/missingStocks.json' : './jsonAndCsv/missingAssets.json';
+const populatePriceData = async () => {
+  const jsonRoute = (stocksOrOther == 'stocks') ? : './jsonAndCsv/missingAssets.json';
   const tickerArray = selectALL   // Different file paths needed for stocks or other assets.
   let counter = 0;
 
@@ -61,12 +58,8 @@ const populateFromYahooData = async (stocksOrOther) => { //String input to diffe
     }
   }
 
-  missingTickersToJson(missingTickers, jsonRoute);
+  missingTickersToJson(missingTickers, './jsonAndCsv/missingTickers.json');
 }
-*/
 
 
-// module.exports = populateFromYahooData;
-
-
-addPriceDataToDb('AAPL', 1)
+module.exports = populatePriceData;
