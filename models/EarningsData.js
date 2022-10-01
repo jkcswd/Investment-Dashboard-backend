@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { db } = require('../databaseConnection');
+const db  = require('../databaseConnection');
 const TickerList = require('./TickerList');
 
 const EarningsData = db.define('EarningsData', {
