@@ -11,7 +11,6 @@ const getEarningsHistory = async (ticker) => {
     const results = await yahooFinance.quoteSummary(ticker, {modules: [ "earningsHistory" ] });
     const tickerPriceObj = { name: ticker, results: results.earningsHistory.history };
 
-    console.log(tickerPriceObj)
     return tickerPriceObj;
   } catch (err) {
     console.log(err.message);
