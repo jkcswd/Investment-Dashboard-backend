@@ -46,7 +46,7 @@ const populateEarningsData = async () => {
   let counter = 0;
   const tickerArray = await TickerList.findAll({
     attributes: ['ticker', 'id'],
-    where: { dataSource: 'yahoo' }
+    where: { dataSource: 'yahoo', type: 'stock' }
   });
 
   await EarningsData.sync();
