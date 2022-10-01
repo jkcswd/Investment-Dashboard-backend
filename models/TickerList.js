@@ -13,5 +13,8 @@ const TickerList = db.define('TickerList', {
 TickerList.hasMany(PriceData);
 TickerList.hasMany(EarningsData);
 TickerList.hasMany(EconomicData);
+EarningsData.belongsTo(TickerList);
+EconomicData.belongsTo(TickerList);
+PriceData.belongsTo(TickerList);
 
 module.exports = TickerList;
