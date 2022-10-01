@@ -19,19 +19,19 @@ const getTickerPriceHistory = async (ticker) => {
 const addPriceDataToDb = async (ticker, fKey) => { 
   try {
     const tickerPriceObj = await getTickerPriceHistory(ticker);
+    if (tickerPriceObj) {
+      for (result of tickerPriceObj.results) {
 
-    for (result of tickerPriceObj.results) {
-      if (tickerPriceObj) {
-        await PriceData.create({
-          date: result.date,
-          open: result.open,
-          high: result.high,
-          low: result.low,
-          close: result.close,
-          volume: result.volume,
-          TickerListId: fKey
-        }, { logging: false })
-      }
+          await PriceData.create({
+            date: result.date,
+            open: result.open,
+            high: result.high,
+            low: result.low,
+            close: result.close,
+            volume: result.volume,
+            TickerListId: fKey
+          }, { logging: false })
+        }
     }
   } catch (err) {
     console.log(err.message);
@@ -45,8 +45,6 @@ const populatePriceData = async () => {
     where: { dataSource: 'yahoo' }
   });
 
-  
-    
   await PriceData.sync();
   missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
@@ -62,7 +60,5 @@ const populatePriceData = async () => {
 
   missingTickersToJson(missingTickers, './jsonAndCsv/missingTickers.json');
 }
-
-populatePriceData();
 
 module.exports = populatePriceData;
