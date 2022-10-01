@@ -31,8 +31,9 @@ const addPriceDataToDb = async (ticker, fKey) => {
               close: result.close,
               volume: result.volume,
               TickerListId: fKey
-            }
-        }, { logging: false });
+            },
+            logging: false 
+          });
         }
     }
   } catch (err) {
