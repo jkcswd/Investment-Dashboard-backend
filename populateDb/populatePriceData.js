@@ -21,16 +21,18 @@ const addPriceDataToDb = async (ticker, fKey) => {
     const tickerPriceObj = await getTickerPriceHistory(ticker);
     if (tickerPriceObj) {
       for (result of tickerPriceObj.results) {
-
-          await PriceData.create({
-            date: result.date,
-            open: result.open,
-            high: result.high,
-            low: result.low,
-            close: result.close,
-            volume: result.volume,
-            TickerListId: fKey
-          }, { logging: false })
+          await PriceData.findOrCreate({
+            where: { date: result.date, TickerListId: fKey },
+            defaults: {
+              date: result.date,
+              open: result.open,
+              high: result.high,
+              low: result.low,
+              close: result.close,
+              volume: result.volume,
+              TickerListId: fKey
+            }
+        }, { logging: false });
         }
     }
   } catch (err) {
