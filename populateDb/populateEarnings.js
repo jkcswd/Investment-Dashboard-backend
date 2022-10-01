@@ -1,6 +1,6 @@
 const yahooFinance = require('yahoo-finance2').default;
-const {earningsDb, query} = require('../database.js');
-const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson } = require('./utilities.js');
+const EarningsData = require('../models/associations.js');
+const {  percentProgressDisplay,  missingTickersToJson } = require('./utilities.js');
 
 // TODO: potential refactor as this code is fairly similar to populateFromYahoo.js
 
@@ -11,6 +11,7 @@ const getEarningsHistory = async (ticker) => {
     const results = await yahooFinance.quoteSummary(ticker, {modules: [ "earningsHistory" ] });
     const tickerPriceObj = { name: ticker, results: results.earningsHistory.history };
 
+    console.log(tickerPriceObj)
     return tickerPriceObj;
   } catch (err) {
     console.log(err.message);
@@ -23,9 +24,17 @@ const addEarningsDataToDb = async (ticker, fKey) => {
       const tickerPriceObj = await getEarningsHistory(ticker);
 
       if (tickerPriceObj) {
-        
-
-
+        for (result of tickerPriceObj.results) {
+          await EarningsData.findOrCreate({
+            where: { date: result.date, TickerListId: fKey },
+            defaults: {
+              date: result.quarter,
+              epsActual: result.epsActual,
+              epsEstimate: result.epsEstimate
+            },
+            logging: false 
+          });
+        }
       }
     } catch (err) {
       console.log(err.message);
@@ -49,5 +58,7 @@ const populateEarningsData = async () => {
 
   missingTickersToJson(missingTickers, './jsonAndCsv/missingStocksEarnings.json');
 }
+
+getEarningsHistory('AAPL')
 
 module.exports = populateEarningsData;
