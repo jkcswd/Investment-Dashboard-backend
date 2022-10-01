@@ -49,7 +49,6 @@ const populatePriceData = async () => {
   });
 
   await PriceData.sync();
-  missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
   for (const tickerData of tickerArray) { 
     try {
