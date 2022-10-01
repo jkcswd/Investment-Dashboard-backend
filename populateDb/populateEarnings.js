@@ -1,5 +1,5 @@
 const yahooFinance = require('yahoo-finance2').default;
-const EarningsData = require('../models/associations.js');
+const { EarningsData, TickerList } = require('../models/associations.js');
 const {  percentProgressDisplay,  missingTickersToJson } = require('./utilities.js');
 
 // TODO: potential refactor as this code is fairly similar to populateFromYahoo.js
