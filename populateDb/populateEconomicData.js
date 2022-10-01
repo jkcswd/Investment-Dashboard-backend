@@ -1,6 +1,5 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const { economicDb, query } = require('../database');
 const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson } = require('./utilities.js')
 
 // TODO: potential refactor as this code is fairly similar to populateFromYahoo.js
@@ -44,8 +43,6 @@ const populateEconomicData = async () => {
   const jsonRoute = './jsonAndCsv/missingEconomic.json'
   const symbolArray = csvToArray(csvRoute);  
   let counter = 0;
-
-  missingSymbols.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
   for (const symbol of symbolArray) {
     try {
