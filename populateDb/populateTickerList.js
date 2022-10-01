@@ -27,7 +27,7 @@ const updateTickerList = async (csvPath, type, dataSource) => {
 const updateTickerListAll = () => {
   updateTickerList('./jsonAndCsv/wilshire5000Stocks.csv' , 'stock', 'yahoo');
   updateTickerList('./jsonAndCsv/otherAssets.csv', 'other', 'yahoo');
-  updateTickerList('./jsonAndCsv/wilshire5000Stocks.csv', 'economic', 'fred');
+  updateTickerList('./jsonAndCsv/economic.csv', 'economic', 'fred');
 }
 
 module.exports = updateTickerListAll;
