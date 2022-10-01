@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJson } = require('./utilities.js')
+const { percentProgressDisplay, missingTickersToJson } = require('./utilities.js')
 
 // TODO: potential refactor as this code is fairly similar to populateFromYahoo.js
 
