@@ -41,7 +41,7 @@ const addPriceDataToDb = async (ticker, fKey) => {
 const populatePriceData = async () => {
   let counter = 0;
   const tickerArray = await TickerList.findAll({
-    attributes: ['ticker'],
+    attributes: ['ticker', 'id'],
     where: { dataSource: 'yahoo' }
   });
 
@@ -50,7 +50,7 @@ const populatePriceData = async () => {
 
   for (const tickerData of tickerArray) { 
     try {
-      await addPriceDataToDb(tickerData.dataValues.ticker);
+      await addPriceDataToDb(tickerData.dataValues.ticker, tickerData.dataValues.id);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
