@@ -1,4 +1,4 @@
-const populatePriceData = require('./populateFromYahoo.js');
+const populateFromYahoo = require('./populateFromYahoo.js');
 const checkForPopulate = require('./cli.js');
 
 const main = async () => {
@@ -7,8 +7,8 @@ const main = async () => {
   //const checkForEarningsDataPopulate = await checkForPopulate('stock earnings');
   //const checkForEconomicDataPopulate = await checkForPopulate('economic');
 
-  if (checkForStockPricePopulate == 'y') { await populatePriceData('stocks'); }
-  if (checkForOtherPricePopulate == 'y') { await populatePriceData('other'); }
+  if (checkForStockPricePopulate == 'y') { await populateFromYahooData('stocks'); }
+  if (checkForOtherPricePopulate == 'y') { await populateFromYahooData('other'); }
   //if (checkForOtherPricePopulate == 'y') { populateEarnings(); }
   //if (checkForOtherPricePopulate == 'y') { populateEconomicData(); }
 }
