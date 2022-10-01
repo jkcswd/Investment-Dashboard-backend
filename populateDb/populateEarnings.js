@@ -18,19 +18,14 @@ const getEarningsHistory = async (ticker) => {
   }
 }
 
-const addEarningsDataToDb = async (ticker) => { 
+const addEarningsDataToDb = async (ticker, fKey) => { 
     try {
       const tickerPriceObj = await getEarningsHistory(ticker);
 
       if (tickerPriceObj) {
-        const name = ticker;
-        const values = tickerPriceObj.results;  
+        
 
-        await query(earningsDb, `CREATE TABLE IF NOT EXISTS ${name} (date text UNIQUE, epsActual real, epsEstimate real)`, 'run');
 
-        for (const value of values) {
-          await query(earningsDb, `INSERT OR IGNORE INTO ${name} VALUES("${extractDateString(value.quarter)}", ${value.epsActual}, ${value.epsEstimate})`, 'run');
-        }
       }
     } catch (err) {
       console.log(err.message);
@@ -38,16 +33,13 @@ const addEarningsDataToDb = async (ticker) => {
 }
 
 const populateEarningsData = async () => { 
-  const csvRoute = './jsonAndCsv/wilshire5000Stocks.csv';
-  const jsonRoute = './jsonAndCsv/missingStocksEarnings.json';
-  const tickerArray = csvToArray(csvRoute);   
   let counter = 0;
 
-  missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
+  // TODO create array selecting dataSource:yahoo data from tickerlist
 
   for (const ticker of tickerArray) {
     try {
-      await addEarningsDataToDb(ticker, stocksOrOther);
+      await addEarningsDataToDb(ticker, fKey);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
@@ -55,7 +47,7 @@ const populateEarningsData = async () => {
     }
   }
 
-  missingTickersToJson(missingTickers, jsonRoute);
+  missingTickersToJson(missingTickers, './jsonAndCsv/missingStocksEarnings.json');
 }
 
 module.exports = populateEarningsData;
