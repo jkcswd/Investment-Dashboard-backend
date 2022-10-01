@@ -6,7 +6,7 @@ const db = new Sequelize({
 });
 
 
-const check = async () => {
+const check = async () => { //for use if needed
   try {
     await db.authenticate();
     console.log('Connection to database has been established successfully.');
@@ -15,6 +15,5 @@ const check = async () => {
   }
 }
 
-check();
 
 module.exports = db;
