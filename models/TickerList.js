@@ -6,7 +6,8 @@ const EarningsData = require('./EarningsData');
 
 const TickerList = db.define('TickerList', {
   ticker:{ type: DataTypes.STRING },
-  type:{ type: DataTypes.STRING }
+  type:{ type: DataTypes.STRING },
+  dataSource:{ type: DataTypes.STRING }
 });
 
 TickerList.hasMany(PriceData);
