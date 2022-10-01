@@ -30,7 +30,8 @@ const addEarningsDataToDb = async (ticker, fKey) => {
             defaults: {
               date: result.quarter,
               epsActual: result.epsActual,
-              epsEstimate: result.epsEstimate
+              epsEstimate: result.epsEstimate,
+              TickerListId: fKey
             },
             logging: false 
           });
@@ -43,12 +44,16 @@ const addEarningsDataToDb = async (ticker, fKey) => {
 
 const populateEarningsData = async () => { 
   let counter = 0;
+  const tickerArray = await TickerList.findAll({
+    attributes: ['ticker', 'id'],
+    where: { dataSource: 'yahoo' }
+  });
 
-  // TODO create array selecting dataSource:yahoo data from tickerlist
+  await EarningsData.sync();
 
-  for (const ticker of tickerArray) {
+  for (const tickerData of tickerArray) {
     try {
-      await addEarningsDataToDb(ticker, fKey);
+      await addEarningsDataToDb(tickerData.dataValues.ticker, tickerData.dataValues.id);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
@@ -58,7 +63,5 @@ const populateEarningsData = async () => {
 
   missingTickersToJson(missingTickers, './jsonAndCsv/missingStocksEarnings.json');
 }
-
-getEarningsHistory('AAPL')
 
 module.exports = populateEarningsData;
