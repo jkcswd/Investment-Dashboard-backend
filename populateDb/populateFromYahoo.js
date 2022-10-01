@@ -4,7 +4,7 @@ const { extractDateString, percentProgressDisplay, csvToArray, missingTickersToJ
 
 const missingTickers = [];
 
-const getTickerPriceHistory = async (ticker) => { 
+const getTickerPriceHistory = async (ticker) => { //correct
   try {
     const results = await yahooFinance.historical(ticker, { period1: '1900-01-01' });
     const tickerPriceObj = { name: ticker, results };
@@ -20,6 +20,8 @@ const addPriceDataToDb = async (ticker, stocksOrOther) => { // Other assets with
     try {
       const tickerPriceObj = await getTickerPriceHistory(ticker);
 
+
+      // TODO: change code from here
       if (tickerPriceObj) {
         const name = (stocksOrOther == 'stocks') ? tickerPriceObj.name : `"${tickerPriceObj.name}"`;
         const values = tickerPriceObj.results;  
@@ -36,6 +38,7 @@ const addPriceDataToDb = async (ticker, stocksOrOther) => { // Other assets with
 }
 
 const populateFromYahooData = async (stocksOrOther) => { //String input to differentiate data that function should populate.
+  // Will not need CSV Route and function
   const csvRoute = (stocksOrOther == 'stocks') ? './jsonAndCsv/wilshire5000Stocks.csv' : './jsonAndCsv/otherAssets.csv';
   const jsonRoute = (stocksOrOther == 'stocks') ? './jsonAndCsv/missingStocks.json' : './jsonAndCsv/missingAssets.json';
   const tickerArray = csvToArray(csvRoute);   // Different file paths needed for stocks or other assets.
@@ -43,7 +46,7 @@ const populateFromYahooData = async (stocksOrOther) => { //String input to diffe
 
   missingTickers.length = 0; // clear the array in case it is holding data already from previous function call during the runtime of program.
 
-  for (const ticker of tickerArray) {
+  for (const ticker of tickerArray) { // This is probably correct
     try {
       await addPriceDataToDb(ticker, stocksOrOther);
       counter++;
