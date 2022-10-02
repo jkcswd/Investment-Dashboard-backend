@@ -11,4 +11,4 @@ const TickerListSchema = new Schema({
   economic: { type: Schema.Types.ObjectId, ref: 'Economic', required: false }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('TickerList', TickerListSchema);
