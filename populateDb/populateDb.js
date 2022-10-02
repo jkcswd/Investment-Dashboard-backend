@@ -3,6 +3,9 @@ const populateTickerListAll = require('./populateTickerList');
 const populateEarningsData = require('./populateEarnings')
 //const populateEconomicData = require('./populateEconomicData')
 const checkForPopulate = require('./cli.js');
+const connectDb = require('../databaseConnection.js');
+
+connectDb();
 
 const main = async () => {
   const checkForTickerListPopulate = await checkForPopulate('ticker list')
