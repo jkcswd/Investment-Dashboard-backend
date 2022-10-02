@@ -1,13 +1,14 @@
-const { DataTypes } = require('sequelize');
-const  db  = require('../databaseConnection');
+const mongoose = require('mongoose');
 
-const PriceData = db.define('PriceData', {
-  date: { type: DataTypes.DATE },
-  open:{ type: DataTypes.DOUBLE },
-  high:{ type: DataTypes.DOUBLE },
-  low:{ type: DataTypes.DOUBLE },
-  close:{ type: DataTypes.DOUBLE },
-  volume:{ type: DataTypes.BIGINT }
+const Schema = mongoose.Schema;
+
+const PriceSchema = new Schema({
+  date: { type: Number, required: false },
+  open: { type: Number, required: false },
+  high: { type: Number, required: false },
+  low: { type: Number, required: false },
+  close: { type: Number, required: false },
+  volume: { type: Number, required: false }
 });
 
-module.exports = PriceData;
+module.exports = mongoose.model('Price', PriceSchema);
