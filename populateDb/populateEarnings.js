@@ -25,7 +25,7 @@ const addEarningsDataToDb = async (ticker, fKey) => {
       if (tickerPriceObj) {
         for (result of tickerPriceObj.results) {
           await EarningsData.findOrCreate({
-            where: { date: result.date, TickerListId: fKey },
+            where: { date: result.quarter, TickerListId: fKey },
             defaults: {
               date: result.quarter,
               epsActual: result.epsActual,
