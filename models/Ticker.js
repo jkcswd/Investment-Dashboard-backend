@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const TickerListSchema = new Schema({
+const Ticker = new Schema({
   ticker: { type: String, required: true },
   type: { type: String, required: true },
   dataSource: { type: String, required: true },
@@ -11,4 +11,4 @@ const TickerListSchema = new Schema({
   economic: { type: Schema.Types.ObjectId, ref: 'Economic', required: false }
 });
 
-module.exports = mongoose.model('TickerList', TickerListSchema);
+module.exports = mongoose.model('Ticker', Ticker);
