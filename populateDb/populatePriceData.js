@@ -1,7 +1,7 @@
 const yahooFinance = require('yahoo-finance2').default;
 const Price = require('../models/Price.js');
 const Ticker = require('../models/Ticker.js');
-const {percentProgressDisplay, missingTickersToJson } = require('./utilities.js')
+const {percentProgressDisplay, missingTickersToJson } = require('./utilities.js');
 
 const missingTickers = [];
 
@@ -23,6 +23,7 @@ const addPriceDataToDb = async (ticker, tickerId) => {
       for (day of data) {
         try {
           const checkIfExists = await Price.findOne({ticker, date:day.date});
+
           if (!checkIfExists) {
             const doc = new Price({
               tickerId: tickerId,
@@ -35,10 +36,11 @@ const addPriceDataToDb = async (ticker, tickerId) => {
               adjClose: day.adjClose,
               volume: day.volume
             });
+
             await doc.save();
           }
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
         }
     }
@@ -64,19 +66,4 @@ const populatePriceData = async () => {
   missingTickersToJson(missingTickers, './jsonAndCsv/missingTickers.json');
 }
 
-
 module.exports = populatePriceData;
-
-
-/*
-  {
-    date: 1981-05-06T00:00:00.000Z,
-    open: 0.122768,
-    high: 0.122768,
-    low: 0.12221,
-    close: 0.12221,
-    adjClose: 0.095255,
-    volume: 18950400
-  },
-*/
-
