@@ -6,7 +6,6 @@ const connectDb = require('./databaseConnection');
 
 const symbolRouter= require('./routes/symbol');
 
-
 const app = express();
 
 app.use(logger('dev'));
