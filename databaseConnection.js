@@ -1,19 +1,11 @@
-const { Sequelize } = require('sequelize');
+const mongoose = require('mongoose') ;
+require('dotenv').config();
 
-const db = new Sequelize({
-  dialect: 'sqlite',
-  storage: './mainDB.db'
-});
-
-
-const check = async () => { //for use if needed
-  try {
-    await db.authenticate();
-    console.log('Connection to database has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
+const connectDb = () => {
+  const mongoDB = process.env.MONGO_STRING;
+  mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
+  const db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 }
 
-
-module.exports = db;
+module.exports = connectDb;

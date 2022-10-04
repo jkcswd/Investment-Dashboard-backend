@@ -8,6 +8,7 @@
     "populate": "node ./populateDb/populateDb.js"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
@@ -16,9 +17,11 @@
     "http-errors": "~1.6.3",
     "inquirer": "^8.2.4",
     "jade": "~1.11.0",
+    "mongoose": "^6.6.3",
     "morgan": "~1.9.1",
     "node-fetch": "^2.6.7",
     "nodemon": "^2.0.19",
+    "request-promise": "^4.2.6",
     "sequelize": "^6.23.2",
     "sqlite3": "^5.0.9",
     "yahoo-finance2": "^2.3.4"

@@ -1,5 +1,6 @@
 const yahooFinance = require('yahoo-finance2').default;
-const { EarningsData, TickerList } = require('../models/associations.js');
+const Ticker = require('../models/Ticker.js');
+const Earnings = require('../models/Earnings.js');
 const {  percentProgressDisplay,  missingTickersToJson } = require('./utilities.js');
 
 // TODO: potential refactor as this code is fairly similar to populateFromYahoo.js
@@ -9,54 +10,47 @@ const missingTickers = [];
 const getEarningsHistory = async (ticker) => { 
   try {
     const results = await yahooFinance.quoteSummary(ticker, {modules: [ "earningsHistory" ] });
-    const tickerPriceObj = { name: ticker, results: results.earningsHistory.history };
 
-    return tickerPriceObj;
+    return results.earningsHistory.history;
   } catch (err) {
     console.log(err.message);
     missingTickers.push(ticker);
   }
 }
 
-const addEarningsDataToDb = async (ticker, fKey) => { 
-    try {
-      const tickerPriceObj = await getEarningsHistory(ticker);
+const addEarningsDataToDb = async (ticker, tickerId) => { 
+  try {
+    const data = await getEarningsHistory(ticker);
 
-      if (tickerPriceObj) {
-        for (result of tickerPriceObj.results) {
-          await EarningsData.findOrCreate({
-            where: { date: result.quarter, TickerListId: fKey },
-            defaults: {
-              date: result.quarter,
-              epsActual: result.epsActual,
-              epsEstimate: result.epsEstimate,
-              TickerListId: fKey
-            },
-            logging: false 
-          });
-        }
+    if (data) {
+      for (quarter of data) {
+        const doc = new Earnings({
+          tickerId: tickerId,
+          ticker,
+          date: quarter.quarter,
+          epsActual: quarter.epsActual,
+          epsEstimate: quarter.epsEstimate
+        });
+  
+        await doc.save();
       }
-    } catch (err) {
-      console.log(err.message);
     }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const populateEarningsData = async () => { 
   let counter = 0;
-  const tickerArray = await TickerList.findAll({
-    attributes: ['ticker', 'id'],
-    where: { dataSource: 'yahoo', type: 'stock' }
-  });
-
-  await EarningsData.sync();
+  const tickerArray = await Ticker.find({ type:'stock' });
 
   for (const tickerData of tickerArray) {
     try {
-      await addEarningsDataToDb(tickerData.dataValues.ticker, tickerData.dataValues.id);
+      await addEarningsDataToDb(tickerData.ticker, tickerData.id);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   }
 
