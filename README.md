@@ -1,26 +1,24 @@
 # Investment Dashboard
-A dashboard for investment analysis and management.
+A dashboard for investment analysis and portfolio management.
 
 ## Tech
-- SQLite
+- Mongoose/MongoDB
 - Express.js
 - React.js
+- Node.js
 
 ## Overall System Design
-
-- Financial securities and economic data stored in SQLite database within the server filesystem.
-- Data initially populated using populateDb node program.
+- Financial securities and economic data stored in MongoDB database.
+- Data initially populated using populateDb node program created specifically for this use case.
 - Data filtered/paginated by date/other requirements on the server.
 - REST API used to transmit data to client.
-- Calculations done on data by the client to produce composite data or graphical displays of data.
-- 
+- Calculations done on data to produce composite data for tabular and graphical displays of data.
+  - Daily and monthly calculations to be done on the backend server.
+    - Monthly: Relative strength of stocks.
+    - Daily: Up/Down volume, advancers and decliners.
+  - On demand calculations done on frontend.
 
 ## Back-end
-
-- Daily and monthly calculations to be done on the backend server.
-  - Monthly: Relative strength of stocks.
-  - Daily: Up/Down volume, advancers and decliners
+(INSERT DATABSE SCHEMA)
 
 ## Front-end
-
-- On demand calculations done on frontend
