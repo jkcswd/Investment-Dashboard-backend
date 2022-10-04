@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PriceSchema = new Schema({
-  ticker: { type: Date, required: false },
+  ticker: { type: String, required: false },
   date: { type: Date, required: false },
   open: { type: Number, required: false },
   high: { type: Number, required: false },
