@@ -22,7 +22,7 @@ const addPriceDataToDb = async (ticker) => {
     if (data) {
       for (day of data) {
         try {
-          const checkIfExists = Price.findOne({ticker, date:day.date});
+          const checkIfExists = await Price.findOne({ticker, date:day.date});
           if (!checkIfExists) {
             const doc = new Price({
               ticker,
@@ -49,8 +49,7 @@ const addPriceDataToDb = async (ticker) => {
 const populatePriceData = async () => {
   let counter = 0;
   const tickerArray = await Ticker.find({ dataSource:'yahoo' });
-  console.log(tickerArray)
-
+  
   for (const tickerData of tickerArray) { 
     try {
       await addPriceDataToDb(tickerData.ticker);
