@@ -42,16 +42,11 @@ const addEarningsDataToDb = async (ticker, tickerId) => {
 
 const populateEarningsData = async () => { 
   let counter = 0;
-  const tickerArray = await TickerList.findAll({
-    attributes: ['ticker', 'id'],
-    where: { dataSource: 'yahoo', type: 'stock' }
-  });
-
-  await EarningsData.sync();
+  const tickerArray = await Ticker.find({ type:'stock' });
 
   for (const tickerData of tickerArray) {
     try {
-      await addEarningsDataToDb(tickerData.dataValues.ticker, tickerData.dataValues.id);
+      await addEarningsDataToDb(tickerData.ticker, tickerData.id);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
@@ -63,17 +58,3 @@ const populateEarningsData = async () => {
 }
 
 module.exports = populateEarningsData;
-
-/*
-[
-  {
-    maxAge: 1,
-    epsActual: 1.24,
-    epsEstimate: 1.24,
-    epsDifference: 0,
-    surprisePercent: 0,
-    quarter: 2021-09-30T00:00:00.000Z,
-    period: '-4q'
-  },
-
-  */ 
