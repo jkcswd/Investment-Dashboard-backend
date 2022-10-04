@@ -1,5 +1,6 @@
-const { DataTypes } = require('sequelize');
-const db  = require('../databaseConnection');
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema;
 
 const EarningsData = db.define('EarningsData', {
   tickerId: { type: Schema.Types.ObjectId, ref: 'Ticker' },
