@@ -16,7 +16,7 @@ const getTickerPriceHistory = async (ticker) => {
   }
 }
 
-const addPriceDataToDb = async (ticker) => { 
+const addPriceDataToDb = async (ticker, tickerId) => { 
   try {
     const data = await getTickerPriceHistory(ticker);
     if (data) {
@@ -25,6 +25,7 @@ const addPriceDataToDb = async (ticker) => {
           const checkIfExists = await Price.findOne({ticker, date:day.date});
           if (!checkIfExists) {
             const doc = new Price({
+              tickerId: tickerId,
               ticker,
               date: day.date,
               open: day.open,
@@ -49,11 +50,10 @@ const addPriceDataToDb = async (ticker) => {
 const populatePriceData = async () => {
   let counter = 0;
   const tickerArray = await Ticker.find({ dataSource:'yahoo' });
-  
+
   for (const tickerData of tickerArray) { 
     try {
-      await addPriceDataToDb(tickerData.ticker);
-      //populate the ref array of ticker
+      await addPriceDataToDb(tickerData.ticker, tickerData.id);
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
