@@ -63,6 +63,7 @@ const populatePriceData = async () => {
     }
   }
 
+  console.log('Price data has been populated.')
   missingTickersToJson(missingTickers, './jsonAndCsv/missingTickers.json');
 }
 

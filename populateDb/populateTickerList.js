@@ -23,6 +23,7 @@ const updateTickerListAll = async () => {
   await updateTickerList('./jsonAndCsv/wilshire5000Stocks.csv' , 'stock', 'yahoo');
   await updateTickerList('./jsonAndCsv/otherAssets.csv', 'other', 'yahoo');
   await updateTickerList('./jsonAndCsv/economic.csv', 'economic', 'fred');
+  console.log('Ticker list has been populated')
 }
 
 module.exports = updateTickerListAll;
