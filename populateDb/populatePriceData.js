@@ -22,9 +22,6 @@ const addPriceDataToDb = async (ticker, tickerId) => {
     if (data) {
       for (day of data) {
         try {
-          const checkIfExists = await Price.findOne({ticker, date:day.date});
-
-          if (!checkIfExists) {
             const doc = new Price({
               tickerId: tickerId,
               ticker,
@@ -38,7 +35,6 @@ const addPriceDataToDb = async (ticker, tickerId) => {
             });
 
             await doc.save();
-          }
         } catch (err) {
           console.log(err);
         }
