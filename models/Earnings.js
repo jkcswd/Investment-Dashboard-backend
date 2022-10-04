@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const EarningsData = db.define('EarningsData', {
+const EarningsPerShareSchema = new Schema({
   tickerId: { type: Schema.Types.ObjectId, ref: 'Ticker' },
   ticker: { type: String, required: false },
-  date:{ type: DataTypes.DATE },
-  epsActual:{ type: DataTypes.DOUBLE },
-  epsEstimate:{ type: DataTypes.DOUBLE },
+  date: { type: Date, required: false },
+  epsActual: { type: Number, required: false },
+  epsEstimate:{ type: Number, required: false }
 });
 
-module.exports = EarningsData;
+module.exports = mongoose.model('EarningsPerShare', EarningsPerShareSchema);
