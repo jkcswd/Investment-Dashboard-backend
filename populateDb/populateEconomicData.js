@@ -9,8 +9,9 @@ const missingSymbols = [];
 const fetchFredData = async (ticker) => {
   try{
     const response = await fetch(`https://api.stlouisfed.org/fred/series?series_id=${ticker}&api_key=${process.env.API_KEY}&file_type=json`); 
+    //alter api call to get the actual dataset.
     const data = await response.json()
-
+    
     return data;
   }catch (err) {
     console.log(err.message)
