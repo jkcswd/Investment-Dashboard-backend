@@ -1,6 +1,6 @@
 const yahooFinance = require('yahoo-finance2').default;
 const Ticker = require('../models/Ticker.js');
-const Earnings = require('../models/Earnings.js')
+const Earnings = require('../models/Earnings.js');
 const {  percentProgressDisplay,  missingTickersToJson } = require('./utilities.js');
 
 // TODO: potential refactor as this code is fairly similar to populateFromYahoo.js
@@ -24,7 +24,7 @@ const addEarningsDataToDb = async (ticker, tickerId) => {
 
     if (data) {
       for (quarter of data) {
-        const doc = new Price({
+        const doc = new Earnings({
           tickerId: tickerId,
           ticker,
           date: quarter.quarter,
@@ -36,7 +36,7 @@ const addEarningsDataToDb = async (ticker, tickerId) => {
       }
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
@@ -50,7 +50,7 @@ const populateEarningsData = async () => {
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   }
 
