@@ -22,18 +22,20 @@ const addPriceDataToDb = async (ticker) => {
     if (data) {
       for (day of data) {
         try {
-          const doc = new Price({
-            ticker,
-            date: day.date,
-            open: day.open,
-            high: day.high,
-            low: day.low,
-            close: day.close,
-            adjClose: day.adjClose,
-            volume: day.volume
-          });
-    
-          await doc.save();
+          const checkIfExists = Price.findOne({ticker, date:day.date});
+          if (!checkIfExists) {
+            const doc = new Price({
+              ticker,
+              date: day.date,
+              open: day.open,
+              high: day.high,
+              low: day.low,
+              close: day.close,
+              adjClose: day.adjClose,
+              volume: day.volume
+            });
+            await doc.save();
+          }
         } catch (err) {
           console.log(err)
         }
@@ -46,12 +48,12 @@ const addPriceDataToDb = async (ticker) => {
 
 const populatePriceData = async () => {
   let counter = 0;
-  const tickerArray = Ticker.find({ dataSource:'yahoo' });
+  const tickerArray = await Ticker.find({ dataSource:'yahoo' });
   console.log(tickerArray)
 
   for (const tickerData of tickerArray) { 
     try {
-      await addPriceDataToDb(tickerData.dataValues.ticker, tickerData.dataValues.id);
+      await addPriceDataToDb(tickerData.ticker);
       //populate the ref array of ticker
       counter++;
       percentProgressDisplay(( counter / tickerArray.length ) * 100);
@@ -62,6 +64,7 @@ const populatePriceData = async () => {
 
   missingTickersToJson(missingTickers, './jsonAndCsv/missingTickers.json');
 }
+
 
 module.exports = populatePriceData;
 
