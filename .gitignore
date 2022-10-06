@@ -10,3 +10,4 @@ calculations.js
 mainDB.db
 databaseSchema.vuerd.json
 missingStocksEarnings.json
+missingTickers.json
