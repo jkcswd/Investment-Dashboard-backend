@@ -1,32 +1,24 @@
-const {priceDb, query} = require("../database");
+const Price = require('../models/Price')
 
 const symbolController = async (req,res,next) => {
-  const tickerSymbol = req.params.ticker;
-  const from = req.query.from;
-  const to = req.query.to;
+  const ticker = req.params.ticker.toUpperCase();
+  let from = req.query.from;
+  let to = req.query.to;
 
+  if(!from) {
+    from = '1900-01-01'
+  }
+
+  if (!to) {
+    to = new Date();
+  }
+  
   try {
-    if (from || to) {
-      if (!from) {
-        const data = await query(priceDb,`SELECT * FROM ${tickerSymbol} WHERE date <= '${to}'`);
-
-        res.json(data);
-      } else if (!to) {
-        const data = await query(priceDb,`SELECT * FROM ${tickerSymbol} WHERE date >='${from}'`);
-
-        res.json(data);
-      }else {
-        const data = await query(priceDb,`SELECT * FROM ${tickerSymbol} WHERE date >='${from}' AND date <= '${to}'`);
-
-        res.json(data);
-      }
-    }else {
-      const data = await query(priceDb,`SELECT * FROM ${tickerSymbol}`);
-    
-      res.json(data);
-    }
-  } catch(err){
-    res.status(400).json({"error":err.message});
+    const data = await Price.find({ ticker, date:{ $gte: from, $lte: to }})
+        
+    res.json(data);
+  } catch (error) {
+    console.log(error)
   }
 }
 
