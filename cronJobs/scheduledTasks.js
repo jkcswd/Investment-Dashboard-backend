@@ -1,13 +1,18 @@
 const cron = require('node-cron');
 
-// Every weekday tasks
-cron.schedule('* * * * Monday, Tuesday, Wednesday, Thursday, Friday', () => {
-  updateDb();
-});
+const scheduledTasks = () => {
+  // Every weekday tasks
+  cron.schedule('* * * * Monday, Tuesday, Wednesday, Thursday, Friday', () => {
+    updateDb();
+  });
 
 
-// Monthly tasks
+  // Monthly tasks
 
-cron.schedule('* * 1 * *', () => {  
-  
-});
+  cron.schedule('* * 1 * *', () => {  
+    
+  });
+}
+
+
+module.exports = scheduledTasks;
