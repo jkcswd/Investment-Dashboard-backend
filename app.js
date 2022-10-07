@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const connectDb = require('./databaseConnection');
+const scheduledTasks = require('./cronJobs/scheduledTasks');
 
 const symbolRouter= require('./routes/symbol');
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 connectDb();
+scheduledTasks();
 
 app.use('/symbol', symbolRouter)
 
