@@ -3,7 +3,7 @@ const populateTickerListAll = require('./populateTickerList');
 const populateEarningsData = require('./populateEarnings')
 //const populateEconomicData = require('./populateEconomicData')
 const checkForPopulate = require('./cli.js');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const connectDb = require('../databaseConnection.js');
 
 
@@ -22,7 +22,7 @@ const main = async () => {
   if (checkForEarningsDataPopulate== 'y') { await populateEarningsData(); }
   //if (checkForEconomicDataPopulate == 'y') { await populateEconomicData(); }
 
-  mongoose.connection.close()
+  mongoose.connection.close();
 }
 
 main();
