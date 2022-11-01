@@ -57,7 +57,7 @@ const addPriceDataToDb = async (ticker, tickerId) => {
 
 const updateDb = async () => {
   connectDb();
-  const tickerArray = await Price.distinct('ticker');
+  const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
   // get ticker ID from ticker collection
   for (const tickerData of tickerArray) { 
     try {
