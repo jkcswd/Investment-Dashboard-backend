@@ -3,7 +3,6 @@ const Price = require('../models/Price.js');
 const Ticker = require('../models/Ticker.js'); 
 const mongoose = require('mongoose')
 const connectDb = require('../databaseConnection.js');
-
 // TODO: similarities to populate DB can refactor out
 
 const getTickerPriceHistory = async (ticker, date) => {
@@ -81,4 +80,3 @@ const updateDb = async () => {
 
 //testing
 updateDb();
-
