@@ -15,11 +15,10 @@ const getTickerPriceHistory = async (ticker, date) => {
     return data;
   } catch (err) {
     console.log(err.message);
-    missingTickers.push(ticker);
   }
 }
 
-const getPriceData = async (ticker) => {  // works
+const getPriceData = async (ticker) => {  
   const lastDate = await Price.findOne({ticker}, 'date').sort({ date: -1 }).limit(1);
   const data = await getTickerPriceHistory(ticker, lastDate.date);
   
@@ -33,7 +32,7 @@ const addPriceDataToDb = async (ticker, tickerId) => {
       for (day of data) {
         try {
             const doc = new Price({
-              tickerId: tickerId,
+              tickerId,
               ticker,
               date: day.date,
               open: day.open,
@@ -58,19 +57,20 @@ const addPriceDataToDb = async (ticker, tickerId) => {
 const updateDb = async () => {
   connectDb();
   const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
-  // get ticker ID from ticker collection
+
   for (const tickerData of tickerArray) { 
     try {
-      await addPriceDataToDb(tickerData.ticker, tickerData.id);
+      const tickerId = await Ticker.findOne({ticker:tickerData},'id');
+
+      await addPriceDataToDb(tickerData, tickerId);
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   } 
+
   mongoose.connection.close();
 }
 
 //testing
-
-
 updateDb();
 
