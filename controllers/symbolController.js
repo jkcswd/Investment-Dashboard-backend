@@ -14,7 +14,7 @@ const symbolController = async (req,res,next) => {
   }
   
   try {
-    const data = await Price.find({ ticker, date:{ $gte: from, $lte: to }}, '-__v -_id -tickerId')
+    const data = await Price.find({ ticker, date:{ $gte: from, $lte: to }}, '-__v -_id -tickerId -ticker')
         
     res.json(data);
   } catch (error) {
