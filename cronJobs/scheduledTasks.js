@@ -14,5 +14,4 @@ const scheduledTasks = () => {
   });
 }
 
-
 module.exports = scheduledTasks;
