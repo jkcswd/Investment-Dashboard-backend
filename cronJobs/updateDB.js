@@ -7,8 +7,8 @@ const connectDb = require('../databaseConnection.js');
 // TODO: similarities to populate DB can refactor out
 
 const getTickerPriceHistory = async (ticker, date) => {
-
   const dateString = date.toISOString().substring(0, 10);
+
   try {
     const data = await yahooFinance.historical(ticker, { period1: dateString });
 
@@ -19,10 +19,14 @@ const getTickerPriceHistory = async (ticker, date) => {
 }
 
 const getPriceData = async (ticker) => {  
-  const lastDate = await Price.findOne({ticker}, 'date').sort({ date: -1 }).limit(1);
-  const data = await getTickerPriceHistory(ticker, lastDate.date);
-  
-  return data;
+  try {
+    const lastDate = await Price.findOne({ticker}, 'date').sort({ date: -1 }).limit(1);
+    const data = await getTickerPriceHistory(ticker, lastDate.date);
+    
+    return data;
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const addPriceDataToDb = async (ticker, tickerId) => { 
@@ -56,7 +60,11 @@ const addPriceDataToDb = async (ticker, tickerId) => {
 
 const updateDb = async () => {
   connectDb();
-  const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
+  try {
+    const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
+  } catch (error) {
+    console.log(error)
+  }
 
   for (const tickerData of tickerArray) { 
     try {
