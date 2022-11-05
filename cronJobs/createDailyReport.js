@@ -63,20 +63,27 @@ const createPercentageArray = async () => {
   return percentageArray;
 }
 
-const calculateLargestGainer = () => {
-  
+const calculateLargestGainer = (array) => {
+  const max = array.reduce((prev,cur)=> {
+    return (prev.percentage > cur.percentage) ? prev : cur
+  },-100);
+
+  return max;
 }
 
-const calculateLargestLoser = () => {
+const calculateLargestLoser = (array) => {
+  const min = array.reduce((prev,cur)=> {
+    return (prev.percentage < cur.percentage) ? prev : cur
+  },100);
 
+  return min;
 }
 
 const createDailyReport = async () => {
   connectDb();
   const overallMarketMove = await calculatePricePercentage('^GSPC');
-  
-  //query db for last two days of each stock price and calculate percentage move
-    // from this array of tickets and percentages find the min and max and store in variables
+  const percentageArray = await createPercentageArray();
+  const 
 
 
   //store this data in a new Daily report
