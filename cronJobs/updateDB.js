@@ -28,31 +28,27 @@ const getPriceData = async (ticker) => {
 }
 
 const addPriceDataToDb = async (ticker, tickerId) => { 
-  try {
-    const data = await getPriceData(ticker);
-    if (data) {
-      for (day of data) {
-        try {
-            const doc = new Price({
-              tickerId,
-              ticker,
-              date: day.date,
-              open: day.open,
-              high: day.high,
-              low: day.low,
-              close: day.close,
-              adjClose: day.adjClose,
-              volume: day.volume
-            });
+  const data = await getPriceData(ticker);
+  if (data) {
+    for (day of data) {
+      try {
+          const doc = new Price({
+            tickerId,
+            ticker,
+            date: day.date,
+            open: day.open,
+            high: day.high,
+            low: day.low,
+            close: day.close,
+            adjClose: day.adjClose,
+            volume: day.volume
+          });
 
-            await doc.save();
-        } catch (err) {
-          console.log(err);
-        }
-        }
-    }
-  } catch (err) {
-    console.log(err.message);
+          await doc.save();
+      } catch (err) {
+        console.log(err);
+      }
+      }
   }
 }
 
