@@ -4,6 +4,8 @@ const path = require('path');
 const logger = require('morgan');
 const connectDb = require('./databaseConnection');
 
+// TODO:sort out unneeded error handling
+
 const symbolRouter= require('./routes/symbol');
 
 const app = express();
