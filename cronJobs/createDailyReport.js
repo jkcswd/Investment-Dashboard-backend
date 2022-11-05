@@ -1,20 +1,20 @@
-const Price = require("../models/Price")
+const Price = require('../models/Price')
 const mongoose = require('mongoose')
 const connectDb = require('../databaseConnection.js');
 
-const calculateOverallMarketPercentage = async () => {
+
+const fetch2DaysPriceData = async (ticker) => {
   try {
-    const data = await Price.find({ticker: 'AAPL'}).sort({ date: -1 }).limit(2);
+    const data = await Price.find({ticker}).sort({ date: -1 }).limit(2);
   
-    console.log(data)
     return data;
   } catch (error) {
     console.log(error)
   }
-
 }
 
-/* [
+/* 
+[
   {
     _id: new ObjectId("63654004585915175677f708"),
     tickerId: new ObjectId("633c912488c4a9fa3e5a6f93"),
@@ -42,6 +42,12 @@ const calculateOverallMarketPercentage = async () => {
     __v: 0
   }
 ] */
+
+const calculateOverallMarketPercentage = async () => {
+  const data = await fetch2DaysPriceData('^GSPC')
+
+  console.log(data)
+}
 
 
 const createDailyReport = async () => {
