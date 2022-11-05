@@ -70,7 +70,7 @@ const calculateLargestGainer = (array) => {
     return (prev.percentage > cur.percentage) ? prev : cur
   },-100);
 
-  return max;
+  return max; //NBEV data is garbage remove it from DB?
 }
 
 const calculateLargestLoser = (array) => {
