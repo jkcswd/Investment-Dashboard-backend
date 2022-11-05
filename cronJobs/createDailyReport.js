@@ -4,13 +4,9 @@ const connectDb = require('../databaseConnection.js');
 
 
 const fetch2DaysPriceData = async (ticker) => {
-  try {
-    const data = await Price.find({ticker}).sort({ date: -1 }).limit(2);
-  
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  const data = await Price.find({ticker}).sort({ date: -1 }).limit(2);
+
+  return data;
 }
 
 /* 
@@ -55,11 +51,17 @@ const createPercentageArray = async () => {
   const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
 
   for (ticker of tickerArray) {
-    const percentage = calculatePricePercentage(ticker);
+    try{
+      const percentage = await calculatePricePercentage(ticker);
 
-    percentageArray.push({ticker, percentage})
+      percentageArray.push({ticker, percentage})
+    }catch (error) {
+      console.log(error)
+      console.log(ticker)
+    }
+
   }
-
+  
   return percentageArray;
 }
 
@@ -83,8 +85,17 @@ const createDailyReport = async () => {
   connectDb();
   const overallMarketMove = await calculatePricePercentage('^GSPC');
   const percentageArray = await createPercentageArray();
-  const 
+  const min = calculateLargestLoser(percentageArray);
+  const max = calculateLargestGainer(percentageArray);
 
+
+  console.log(
+    {
+      overallMarketMove,
+      min,
+      max
+    }
+  )
 
   //store this data in a new Daily report
 
