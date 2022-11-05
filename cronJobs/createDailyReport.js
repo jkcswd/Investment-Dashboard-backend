@@ -9,7 +9,7 @@ const fetch2DaysPriceData = async (ticker) => {
   
     return data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
@@ -43,17 +43,38 @@ const fetch2DaysPriceData = async (ticker) => {
   }
 ] */
 
-const calculateOverallMarketPercentage = async () => {
-  const data = await fetch2DaysPriceData('^GSPC')
+const calculatePricePercentage = async (ticker) => {
+  const data = await fetch2DaysPriceData(ticker);
+  const percentage = ((data[0].adjClose - data[1].adjClose) / data[1].adjClose) * 100;
 
-  console.log(data)
+  return percentage;
 }
 
+const createPercentageArray = async () => {
+  const percentageArray = [];
+  const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
+
+  for (ticker of tickerArray) {
+    const percentage = calculatePricePercentage(ticker);
+
+    percentageArray.push({ticker, percentage})
+  }
+
+  return percentageArray;
+}
+
+const calculateLargestGainer = () => {
+  
+}
+
+const calculateLargestLoser = () => {
+
+}
 
 const createDailyReport = async () => {
   connectDb();
-  //Collect last two days of S&P data and calculate percentage gain store in variable
-  await calculateOverallMarketPercentage();
+  const overallMarketMove = await calculatePricePercentage('^GSPC');
+  
   //query db for last two days of each stock price and calculate percentage move
     // from this array of tickets and percentages find the min and max and store in variables
 
