@@ -7,6 +7,8 @@ const scheduledTasks = require('./cronJobs/scheduledTasks');
 
 const symbolRouter= require('./routes/symbol');
 
+// TODO:sort out error handling. Too many not needed try catch blocks
+
 const app = express();
 
 app.use(logger('dev'));
