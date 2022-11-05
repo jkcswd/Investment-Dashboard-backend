@@ -10,7 +10,7 @@ const getTickerPriceHistory = async (ticker, date) => {
 
   try {
     const data = await yahooFinance.historical(ticker, { period1: dateString });
-
+    console.log(data)
     return data;
   } catch (err) {
     console.log(err.message);
@@ -21,7 +21,6 @@ const getPriceData = async (ticker) => {
   try {
     const lastDate = await Price.findOne({ticker}, 'date').sort({ date: -1 }).limit(1);
     const data = await getTickerPriceHistory(ticker, lastDate.date);
-    
     return data;
   } catch (error) {
     console.log(error)
@@ -59,11 +58,7 @@ const addPriceDataToDb = async (ticker, tickerId) => {
 
 const updateDb = async () => {
   connectDb();
-  try {
-    const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
-  } catch (error) {
-    console.log(error)
-  }
+  const tickerArray = await Price.distinct('ticker'); // ['A', 'AA' .....]
 
   for (const tickerData of tickerArray) { 
     try {
