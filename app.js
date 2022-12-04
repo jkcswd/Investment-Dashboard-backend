@@ -7,6 +7,7 @@ const connectDb = require('./databaseConnection');
 // TODO:sort out unneeded error handling
 
 const symbolRouter= require('./routes/symbol');
+const dailyReportRouter= require('./routes/dailyReport');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 connectDb();
 
 app.use('/symbol', symbolRouter)
+app.use('/daily-report', dailyReportRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
