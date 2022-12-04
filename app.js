@@ -3,8 +3,11 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const connectDb = require('./databaseConnection');
+const scheduledTasks = require('./cronJobs/scheduledTasks');
 
 const symbolRouter= require('./routes/symbol');
+
+// TODO:sort out error handling. Too many not needed try catch blocks, Yahoo finance API calls must be wrapped. Think about DB queries
 
 const app = express();
 
@@ -14,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 connectDb();
+scheduledTasks();
 
 app.use('/symbol', symbolRouter)
 
