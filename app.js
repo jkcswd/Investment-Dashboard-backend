@@ -5,7 +5,10 @@ const logger = require('morgan');
 const connectDb = require('./databaseConnection');
 const scheduledTasks = require('./cronJobs/scheduledTasks');
 
+// TODO:sort out unneeded error handling
+
 const symbolRouter= require('./routes/symbol');
+const dailyReportRouter= require('./routes/dailyReport');
 
 // TODO:sort out error handling. Too many not needed try catch blocks, Yahoo finance API calls must be wrapped. Think about DB queries
 
@@ -20,6 +23,7 @@ connectDb();
 scheduledTasks();
 
 app.use('/symbol', symbolRouter)
+app.use('/daily-report', dailyReportRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
