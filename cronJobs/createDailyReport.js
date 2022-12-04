@@ -1,7 +1,7 @@
 const Price = require('../models/Price')
 const mongoose = require('mongoose')
 const connectDb = require('../databaseConnection.js');
-
+const DailyReport = require('../models/DailyReport');
 
 const fetch2DaysPriceData = async (ticker) => {
   const data = await Price.find({ticker}).sort({ date: -1 }).limit(2);
@@ -9,7 +9,7 @@ const fetch2DaysPriceData = async (ticker) => {
   return data;
 }
 
-/* 
+/* structure of returned data:
 [
   {
     _id: new ObjectId("63654004585915175677f708"),
@@ -81,23 +81,32 @@ const calculateLargestLoser = (array) => {
   return min;
 }
 
+const getDate = async (ticker) => {
+  const data = await Price.find({ticker}).sort({ date: -1 }).limit(1);
+
+  return data[0].date;
+}
+
 const createDailyReport = async () => {
   connectDb();
   const overallMarketMove = await calculatePricePercentage('^GSPC');
   const percentageArray = await createPercentageArray();
   const min = calculateLargestLoser(percentageArray);
   const max = calculateLargestGainer(percentageArray);
+  const date = await getDate('^GSPC');
 
+  try {
+    const doc = new DailyReport({
+      date: date,
+      marketPercentageMove: overallMarketMove,
+      largestGainer: max,
+      largestLooser: min
+    });
 
-  console.log(
-    {
-      overallMarketMove,
-      min,
-      max
-    }
-  )
-
-  //store this data in a new Daily report
+    await doc.save();
+  } catch (err) {
+    console.log(err);
+  }
 
   mongoose.connection.close();
 }
