@@ -7,7 +7,7 @@ const scheduledTasks = require('./cronJobs/scheduledTasks');
 
 const symbolRouter= require('./routes/symbol');
 
-// TODO:sort out error handling. Too many not needed try catch blocks
+// TODO:sort out error handling. Too many not needed try catch blocks, Yahoo finance API calls must be wrapped. Think about DB queries
 
 const app = express();
 
