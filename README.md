@@ -22,3 +22,4 @@ A dashboard for investment analysis and portfolio management.
 (INSERT DATABSE SCHEMA)
 
 ## Front-end
+[Front-end repository](https://github.com/jkcswd/Investment-Dashboard-frontend)
