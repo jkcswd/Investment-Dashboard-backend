@@ -1,6 +1,5 @@
 const Portfolio = require('../models/Portfolio')
 
-
 const portfolioGet = async (req,res,next) => {
   try {
     const data = await Portfolio.findOne({portfolioName: req.params.portfolioName})
@@ -11,4 +10,23 @@ const portfolioGet = async (req,res,next) => {
   }
 }
 
-module.exports = { portfolioGet };
+const portfolioPost = async (req,res,next) => {
+  try {
+    try {
+      const portfolio = new Portfolio({
+        portfolioName: req.body.portfolioName,
+        dateOpened: req.body.dateOpened,
+        initialCapital: req.body.capital,
+        currentCapital: req.body.capital
+      });
+  
+      await portfolio.save();
+    } catch (err) {
+      console.log(err);
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+module.exports = { portfolioGet, portfolioPost };
