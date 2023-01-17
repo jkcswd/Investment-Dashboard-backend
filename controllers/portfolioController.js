@@ -31,4 +31,24 @@ const portfolioPost = async (req,res,next) => {
   }
 }
 
-module.exports = { portfolioGet, portfolioPost };
+
+const portfolioPatch = async (req,res,next) => {
+  try {
+    Portfolio.findByIdAndUpdate(req.params.id, req.body);
+
+    res.json({"message": `Updated Portfolio: ${req.params.id}`})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+const portfolioDelete = async (req,res,next) => {
+  try {
+    Portfolio.findByIdAndDelete(req.params.id)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+module.exports = { portfolioGet, portfolioPost, portfolioDelete, portfolioPatch };
