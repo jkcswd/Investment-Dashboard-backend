@@ -1,6 +1,8 @@
 # Investment Dashboard
 A dashboard for investment analysis and portfolio management.
 
+![] (https://github.com/jkcswd/Investment-Dashboard-backend/blob/main/README/demo.webm) 
+
 ## Tech
 - Mongoose/MongoDB
 - Express.js
