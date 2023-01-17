@@ -15,14 +15,16 @@ const portfolioPost = async (req,res,next) => {
     try {
       const portfolio = new Portfolio({
         portfolioName: req.body.portfolioName,
-        dateOpened: req.body.dateOpened,
+        dateOpened: new Date(),
         initialCapital: req.body.capital,
         currentCapital: req.body.capital
       });
   
       await portfolio.save();
-    } catch (err) {
-      console.log(err);
+
+      res.json({"Data Uploaded": req.body.portfolioName})
+    } catch (error) {
+      console.log(error);
     }
   } catch (error) {
     console.log(error)
