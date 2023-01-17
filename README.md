@@ -2,7 +2,7 @@
 A dashboard for investment analysis and portfolio management.
 
 
-![demo] (https://github.com/jkcswd/Investment-Dashboard-backend/blob/main/README/demo.gif) 
+![demo](https://github.com/jkcswd/Investment-Dashboard-backend/blob/main/README/demo.gif) 
 
 
 ## Tech
